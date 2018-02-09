@@ -113,7 +113,7 @@ let Gingerbread = {
 		}
 		if(this.debug){
 			console.log("debugging");
-			ginger.debug = objects.add(game.make.graphics(object.x, object.y));
+			ginger.debug = stage.objects.add(game.make.graphics(object.x, object.y));
 			ginger.debug.beginFill(0xFF0000);
 			ginger.debug.drawRect(0, 0, ginger.width, ginger.height);
 			ginger.debug.endFill();
@@ -145,7 +145,7 @@ let Gingerbread = {
 		}
 		return ginger;
 	},
-	deload: function(){
-		this.list = this.list.filter((obj) => obj == player || obj == player.dialogHitbox); //BIGGEST SHIT
+	clearList: function(filterFunction){
+		this.list = this.list.filter(filterFunction);
 	}
 }

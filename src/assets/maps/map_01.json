@@ -56,7 +56,7 @@
                  "name":"",
                  "properties":
                     {
-                     "class":"player.set"
+                     "class":"Player.prototype.SET"
                     },
                  "propertytypes":
                     {
@@ -194,7 +194,7 @@
         {
          "columns":10,
          "firstgid":1,
-         "image":"tileset.png",
+         "image":"..\/tileset.png",
          "imageheight":192,
          "imagewidth":160,
          "margin":0,
@@ -207,7 +207,7 @@
         {
          "columns":10,
          "firstgid":121,
-         "image":"objects.png",
+         "image":"..\/objects.png",
          "imageheight":160,
          "imagewidth":160,
          "margin":0,

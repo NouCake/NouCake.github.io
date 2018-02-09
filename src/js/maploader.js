@@ -2,18 +2,19 @@ let MapLoader = function(stage){
     this.stage = stage;
 }
 
-MapLoader.prototype.loadMap = function(mapKey){
-    map = game.add.tilemap(mapKey);
+MapLoader.prototype.loadMap = function(mapKey, x, y){
+    map = new Phaser.Tilemap(game, mapKey);
     map.addTilesetImage("tiles", "tileset");
     map.groundLayer = map.createLayer(this._LAYER.GROUND);
     map.topLayer = map.createLayer(this._LAYER.TOP);
     this._createCollisionMap(map);
 
-    this.stage.objects.removeAll();
-    this.stage.objects.add(this.stage.player);
-    this._addObjectsFromMap(map);
-    game.world.bringToTop(stage.objects);
-    stage.player.bringToTop();
+    game.world.setBounds(0,0, map.width * TILE_SIZE, map.height * TILE_SIZE);
+
+    if(x && y)
+        stage.player.SET(x, y);
+        
+    return map;
 }
 
 MapLoader.prototype._LAYER = {
@@ -23,12 +24,16 @@ MapLoader.prototype._LAYER = {
     OBJECTS: 3,
 }
 
-MapLoader.prototype._addObjectsFromMap = function(map){
+MapLoader.prototype.addObjectsFromMap = function(map, group){
     //if(!this.map.objects.objects) return;
 	objects = map.objects.objects;
 	for(i in objects){
-        console.log(objects[i].properties.class);
-		eval(objects[i].properties.class)(objects[i].x, objects[i].y-TILE_SIZE, objects[i].properties);
+        objClass = eval(objects[i].properties.class);
+        obj = new objClass(objects[i].x, objects[i].y-TILE_SIZE, objects[i].properties);
+        if(obj instanceof Phaser.Sprite){
+            console.log(objects[i].properties.class);
+            group.add(obj);
+        }
 	}
 }
     

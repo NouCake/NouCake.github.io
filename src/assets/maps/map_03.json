@@ -125,6 +125,26 @@
                  "width":16,
                  "x":80,
                  "y":192
+                }, 
+                {
+                 "gid":144,
+                 "height":16,
+                 "id":9,
+                 "name":"",
+                 "properties":
+                    {
+                     "class":"Crate"
+                    },
+                 "propertytypes":
+                    {
+                     "class":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":112
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -132,7 +152,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":9,
+ "nextobjectid":10,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.0",

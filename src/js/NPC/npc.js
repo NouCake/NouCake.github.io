@@ -9,7 +9,6 @@ NPC = function(x, y, key, animated){
         this._timer = 0;
     }
 }
-
 NPC.prototype = Object.create(Phaser.Sprite.prototype);
 NPC.prototype.constructor = NPC;
 

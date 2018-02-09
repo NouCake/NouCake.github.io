@@ -4,7 +4,7 @@ function Player(){
     Gingerbread.addPhysics(this);
     this.ginger.setSize(7, 9);
     this.ginger.setOrigin(-4, -5);
-    //this.ginger.collidesWithMap = true;
+    this.ginger.collidesWithMap = true;
 
     stage.input.addButton(4, this._onDialogPressed);
     this._addAnimations();
@@ -13,9 +13,11 @@ function Player(){
     this.name = "Player";
 
     this.anchor.set(0.5, 0.5);
+    this._state = this._STATES.IDLE;
     this._directionFreezed = false;
     this._maxSpeed = 75;
     this._direction = 0;
+    this.health = 6;
 }
 
 Player.prototype = Object.create(Phaser.Sprite.prototype)
@@ -24,6 +26,10 @@ Player.prototype.constructor = Player;
 Player.prototype.update = function(){
     this.inputUpdate();
     this.animationUpdate();
+    this.boundedUpdate();
+    this.dialogHitbox.update();
+
+    game.camera.follow(this);
 }
 
 Player.prototype.inputUpdate = function(){
@@ -65,8 +71,39 @@ Player.prototype.inputUpdate = function(){
 }
 
 Player.prototype.animationUpdate = function(){
+    //console.log(this);
     this.animations.play(this._getCurrentAnimation().name, 8);
     this.scale.x = this._direction == 3 ? -1 : 1;
+}
+
+Player.prototype.boundedUpdate = function(){
+    if(this._bounded){
+        this._bounded.ginger.speed.x = this.ginger.speed.x;
+        this._bounded.ginger.speed.y = this.ginger.speed.y;
+    }
+}
+
+Player.prototype.onCollision = function(other){
+    this.x = this.previousPosition.x;
+	this.y = this.previousPosition.y;
+	if(this._bounded && this._bounded != other){
+		this._bounded.onCollision(this);
+	}
+}
+
+Player.prototype.bindObject = function(object){
+    this._bounded = object;
+    this._bounded.ginger.speed.set(0);
+    console.log("bounded");
+    this._directionFreezed = true;
+    return true;
+}
+
+Player.prototype.unbindBoundedObject = function(){
+    this._bounded.ginger.speed.set(0);
+    this._bounded = null;
+    console.log("unbounded");
+    this._directionFreezed = false;
 }
 
 Player.prototype._getCurrentAnimation = function(){
@@ -108,22 +145,22 @@ Player.prototype._addDialogHitbox = function(){
 	}
 
 	dialogHitbox.update = function(){
-		this.x = this.player.x + 8 * getPointFromDirection(this.player.direction).x;
-		this.y = this.player.y + 8 * getPointFromDirection(this.player.direction).y;
+		this.x = this.player.x + 8 * DIRECTION_AS_POINT[this.player._direction].x;
+		this.y = this.player.y + 8 * DIRECTION_AS_POINT[this.player._direction].y;
 	}
 }
 
 Player.prototype._onDialogPressed = function(){
-    if(stage.player.dialogHitbox.mark && !dialogManager.running && stage.player.dialogHitbox.mark.dialog &&
+    if(stage.player.dialogHitbox.mark && !stage.dialogManager.running && stage.player.dialogHitbox.mark.dialog &&
         Gingerbread.collides(stage.player.dialogHitbox, stage.player.dialogHitbox.mark)){
-        stage.player.dialogHitbox.mark.dialog();
+        stage.player.dialogHitbox.mark.dialog(stage.player);
     }
 }
 
 Player.prototype.SET = function(x, y){
     if(stage.player){
-        stage.player.x = x;
-        stage.player.y = y;
+        stage.player.x = x + stage.player.width * stage.player.anchor.x;
+        stage.player.y = y + stage.player.height * stage.player.anchor.y;
     }
 }
 
