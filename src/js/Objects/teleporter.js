@@ -1,0 +1,3 @@
+Teleporter = function(){
+    
+}
