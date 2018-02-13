@@ -29,7 +29,6 @@ QuestManager.prototype.unsubscribe = function(key, quest){
             delete this.subscribers[i];
         }
     }
-    this.subscribers = this.subscribers.filter(obj => obj != undefined);
 }
 
 QuestManager.prototype.notifyDialog = function(key, object){
