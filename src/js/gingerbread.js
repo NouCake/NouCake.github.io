@@ -1,18 +1,18 @@
 //version 1.3
 
 let Gingerbread = {
-	list: [],
+	physicBodies: [],
 	debug: false,
 	init: function(state){
 		this.state = state;
 	},
 	addPhysics: function(object){
-		this.list.push(object);
+		this.physicBodies.push(object);
 		object.ginger = this.createBody(object);
 	},
 	update: function(){
-		for(obj in this.list){
-			this.updateUnit.call(this.list[obj]);
+		for(obj in this.physicBodies){
+			this.updateUnit.call(this.physicBodies[obj]);
 		}
 		this.collisionDetection();
 	},
@@ -31,24 +31,21 @@ let Gingerbread = {
 		this.collisionWithTrigger();
 	},
 	collisionWithObjects: function(){
-		for(a = 0; a < this.list.length-1; a++){
-			for(b = a+1; b < this.list.length; b++){
-				if(this.list[b].name = "wood"){
-					//console.log("wood", this.list[b].x)
-				}
-				if(!(this.list[a].ginger.trigger || this.list[b].ginger.trigger) && this.collides(this.list[a], this.list[b])){
-					if(this.list[a].onCollision){
-						this.list[a].onCollision(this.list[b]);
+		for(a = 0; a < this.physicBodies.length-1; a++){
+			for(b = a+1; b < this.physicBodies.length; b++){
+				if(!(this.physicBodies[a].ginger.trigger || this.physicBodies[b].ginger.trigger) && this.collides(this.physicBodies[a], this.physicBodies[b])){
+					if(this.physicBodies[a].onCollision){
+						this.physicBodies[a].onCollision(this.physicBodies[b]);
 					}
-					if(this.list[b].onCollision){
-						this.list[b].onCollision(this.list[a]);
+					if(this.physicBodies[b].onCollision){
+						this.physicBodies[b].onCollision(this.physicBodies[a]);
 					}
 				}
 			}
 		}
 	},
 	collisionWithMap: function(){
-		mapColliders = this.list.filter((other) => other.ginger.collidesWithMap);
+		mapColliders = this.physicBodies.filter((other) => other.ginger.collidesWithMap);
 		for(obj in mapColliders){
 			for(block in this.state.map.collisionMap){
 				if(this.collides(mapColliders[obj], this.state.map.collisionMap[block])){
@@ -58,13 +55,13 @@ let Gingerbread = {
 		}
 	},
 	collisionWithTrigger: function(){
-		for(a = 0; a < this.list.length; a++){
-			if(this.list[a].ginger.trigger)
-				for(b = 0; b < this.list.length; b++){
-					if(a != b && !this.list[b].ginger.trigger){
-						if(this.collides(this.list[a], this.list[b])){
+		for(a = 0; a < this.physicBodies.length; a++){
+			if(this.physicBodies[a].ginger.trigger)
+				for(b = 0; b < this.physicBodies.length; b++){
+					if(a != b && !this.physicBodies[b].ginger.trigger){
+						if(this.collides(this.physicBodies[a], this.physicBodies[b])){
 							//console.log(this.list[b].key);
-							this.list[a].onCollision(this.list[b]);
+							this.physicBodies[a].onCollision(this.physicBodies[b]);
 						}
 					}
 				}
@@ -146,6 +143,6 @@ let Gingerbread = {
 		return ginger;
 	},
 	clearList: function(filterFunction){
-		this.list = this.list.filter(filterFunction);
+		this.physicBodies = this.physicBodies.filter(filterFunction);
 	}
 }

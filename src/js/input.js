@@ -13,6 +13,8 @@ Input = function(){
 	}
 }
 
+Input.prototype.constructor = Input;
+
 Input.prototype.clearDialog = function(){
 	if(this.mobile) {
 		this.dpad.dialog.events.onInputDown.removeAll();

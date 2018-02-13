@@ -33,6 +33,7 @@ let stage = {
         this.mapLoader = new MapLoader(this);
         this.healthbar = new Healthbar(this.player);
         this.dialogManager = new DialogManager();
+        this.questManager = new QuestManager();
 
         this.ui.add(this.dialogManager);
         this.ui.add(this.healthbar);

@@ -136,19 +136,17 @@
                  "y":224
                 }, 
                 {
-                 "gid":212,
+                 "gid":28,
                  "height":16,
-                 "id":6,
+                 "id":11,
                  "name":"",
                  "properties":
                     {
-                     "class":"QuestObject",
-                     "object":"Wood"
+                     "class":"QuestWood"
                     },
                  "propertytypes":
                     {
-                     "class":"string",
-                     "object":"string"
+                     "class":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -158,19 +156,19 @@
                  "y":240
                 }, 
                 {
-                 "gid":212,
+                 "gid":123,
                  "height":16,
-                 "id":8,
+                 "id":13,
                  "name":"",
                  "properties":
                     {
-                     "class":"QuestObject",
-                     "object":"Milk"
+                     "class":"Grandpa",
+                     "direction":1
                     },
                  "propertytypes":
                     {
                      "class":"string",
-                     "object":"string"
+                     "direction":"int"
                     },
                  "rotation":0,
                  "type":"",
@@ -185,7 +183,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":9,
+ "nextobjectid":14,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.0",

@@ -1,3 +1,0 @@
-QuestObject = function(){
-    
-}

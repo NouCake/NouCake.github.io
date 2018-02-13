@@ -94,6 +94,13 @@ Player.prototype.onCollision = function(other){
 Player.prototype.bindObject = function(object){
     this._bounded = object;
     this._bounded.ginger.speed.set(0);
+
+    //reducing jittering
+    object.x -= object.x % 1;
+    object.x += this.x % 1 - 0.001;
+    object.y -= object.y % 1;
+    object.y += this.y % 1 - 0.001;
+
     console.log("bounded");
     this._directionFreezed = true;
     return true;
@@ -151,7 +158,7 @@ Player.prototype._addDialogHitbox = function(){
 }
 
 Player.prototype._onDialogPressed = function(){
-    if(stage.player.dialogHitbox.mark && !stage.dialogManager.running && stage.player.dialogHitbox.mark.dialog &&
+    if(stage.player.dialogHitbox.mark && !stage.dialogManager.running &&
         Gingerbread.collides(stage.player.dialogHitbox, stage.player.dialogHitbox.mark)){
         stage.player.dialogHitbox.mark.dialog(stage.player);
     }

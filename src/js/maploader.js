@@ -2,7 +2,7 @@ let MapLoader = function(stage){
     this.stage = stage;
 }
 
-MapLoader.prototype.loadMap = function(mapKey, x, y){
+MapLoader.prototype.loadMap = function(mapKey){
     map = new Phaser.Tilemap(game, mapKey);
     map.addTilesetImage("tiles", "tileset");
     map.groundLayer = map.createLayer(this._LAYER.GROUND);
@@ -10,9 +10,6 @@ MapLoader.prototype.loadMap = function(mapKey, x, y){
     this._createCollisionMap(map);
 
     game.world.setBounds(0,0, map.width * TILE_SIZE, map.height * TILE_SIZE);
-
-    if(x && y)
-        stage.player.SET(x, y);
         
     return map;
 }
@@ -31,7 +28,7 @@ MapLoader.prototype.addObjectsFromMap = function(map, group){
         objClass = eval(objects[i].properties.class);
         obj = new objClass(objects[i].x, objects[i].y-TILE_SIZE, objects[i].properties);
         if(obj instanceof Phaser.Sprite){
-            console.log(objects[i].properties.class);
+            console.log(objects[i].properties.class, "created");
             group.add(obj);
         }
 	}
