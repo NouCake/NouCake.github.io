@@ -84,6 +84,7 @@ Player.prototype.boundedUpdate = function(){
 }
 
 Player.prototype.onCollision = function(other){
+    this.ginger.speed.set(0);
     this.x = this.previousPosition.x;
 	this.y = this.previousPosition.y;
 	if(this._bounded && this._bounded != other){
@@ -97,9 +98,9 @@ Player.prototype.bindObject = function(object){
 
     //reducing jittering
     object.x -= object.x % 1;
-    object.x += this.x % 1 - 0.001;
+    object.x += this.x % 1 + 0.001 * DIRECTION_AS_POINT[this._direction].x;
     object.y -= object.y % 1;
-    object.y += this.y % 1 - 0.001;
+    object.y += this.y % 1 + 0.001 * DIRECTION_AS_POINT[this._direction].y;
 
     console.log("bounded");
     this._directionFreezed = true;

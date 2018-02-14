@@ -24,13 +24,15 @@ DialogManager.prototype = Object.create(Phaser.Sprite.prototype);
 DialogManager.prototype.constructor = DialogManager;
 
 DialogManager.prototype.startDialog = function(text){
+    if(this.running)
+        return;
     this.message = text;
 
     this.visible = true;
     this.running = true;
     this._timer = 0;
     this.line1.text = "";
-    this.line2.text = ""
+    this.line2.text = "";
     this._currentLine = 0;
     this._atLineFeed = false;
     this._finish = false;
@@ -49,6 +51,10 @@ DialogManager.prototype.nextLine = function(){
 			dialogManager._atLineFeed = false;
 			dialogManager._currentLine++;
 			dialogManager._timer = 0;
+        } else {
+            if(dialogManager._timer != 0){
+                dialogManager._timer = dialogManager._maxChars * dialogManager._dialogSpeed;
+            }
         }
         if(dialogManager._finish){
             dialogManager.running = false;

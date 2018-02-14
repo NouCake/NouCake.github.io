@@ -4,6 +4,7 @@ QuestManager = function(){
 
     this.questList.push(new Quest_01(this));
     this.questList.push(new Quest_02(this));
+    this.questList.push(new Quest_03(this));
 
     this.questList[0].startQuest();
 }
@@ -16,25 +17,38 @@ QuestManager.prototype.update = function(){
     }
 }
 
-QuestManager.prototype.subscribe = function(key, callback, quest){
-    this.subscribers.push({key:key, callback:callback, quest:quest});
-    console.log("Listener succesfully subscribed to key", key);
+QuestManager.prototype.subscribe = function(event, key, callback, quest){
+    this.subscribers.push({event:event, key:key, callback:callback, quest:quest});
+    console.log("subscribed", key)
 }
 
-QuestManager.prototype.unsubscribe = function(key, quest){
+QuestManager.prototype.unsubscribe = function(event, key, quest){
     let i = this.subscribers.length;
     while(i--){
-        if(key == this.subscribers[i].key && quest == this.subscribers[i].quest){
-            console.log("Listener succesfully unsubscribed to key", this.subscribers[i].key,);
+        if(this.subscribers[i].quest == quest &&
+            this.subscribers[i].key == key &&
+            this.subscribers[i].event == event){
             delete this.subscribers[i];
+            console.log("unsubscribed", key);
         }
+    }
+    this.subscribers = this.subscribers.filter(obj => obj != undefined);
+}
+
+QuestManager.prototype.notifyEvent = function(event, key, object, other){
+    console.log("notified", key);
+    let i = this.subscribers.length;
+    while(i--) {
+        if(this.subscribers[i].key == key &&
+            this.subscribers[i].event == event){
+                console.log("yes", key);
+                this.subscribers[i].callback.call(object, this.subscribers[i].quest, other);
+            }
     }
 }
 
-QuestManager.prototype.notifyDialog = function(key, object){
-    for(i in this.subscribers){
-        if(this.subscribers[i].key == key){
-            this.subscribers[i].callback.call(object, this.subscribers[i].quest);
-        }
-    }
+QuestManager.prototype.EVENT_TYPES = {
+    CREATE: 0,
+    DIALOG: 1,
+    COLLISION: 2 
 }

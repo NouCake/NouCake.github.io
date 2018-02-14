@@ -24,6 +24,10 @@ let Gingerbread = {
 			this.ginger.debug.x = this.x;
 			this.ginger.debug.y = this.y;
 		}
+		if(this.destroyPhase){
+			console.log("Gingerbread destroyPhase");
+			Gingerbread.remove(this);
+		}
 	},
 	collisionDetection: function(){
 		this.collisionWithObjects();
@@ -77,6 +81,16 @@ let Gingerbread = {
 			return true;
 		}
 		return false;
+	},
+	remove: function(object){
+		let i = this.physicBodies.length;
+		while(i--){
+			if(object == this.physicBodies[i]){
+				delete this.physicBodies[i];
+				this.physicBodies = this.physicBodies.filter(obj => obj!=undefined);
+				console.log("gingerbread removed");
+			}
+		}
 	},
 	createBody: function(object){
 		ginger = {};

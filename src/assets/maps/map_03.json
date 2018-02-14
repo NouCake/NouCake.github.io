@@ -145,6 +145,32 @@
                  "width":16,
                  "x":80,
                  "y":112
+                }, 
+                {
+                 "gid":212,
+                 "height":16,
+                 "id":10,
+                 "name":"",
+                 "properties":
+                    {
+                     "class":"QuestObject",
+                     "frame":91,
+                     "key":"tileset",
+                     "name":"quest_02_trigger"
+                    },
+                 "propertytypes":
+                    {
+                     "class":"string",
+                     "frame":"int",
+                     "key":"string",
+                     "name":"string"
+                    },
+                 "rotation":0,
+                 "type":"",
+                 "visible":true,
+                 "width":16,
+                 "x":80,
+                 "y":176
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -152,7 +178,7 @@
          "x":0,
          "y":0
         }],
- "nextobjectid":10,
+ "nextobjectid":11,
  "orientation":"orthogonal",
  "renderorder":"right-down",
  "tiledversion":"1.1.0",

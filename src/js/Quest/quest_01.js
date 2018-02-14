@@ -2,37 +2,43 @@ Quest_01 = function(questManager){
     Quest.call(this, questManager);
 
     this.dialogs = [
-        "Oh my dear Ninjaboy,"+
-        "would you please    "+
-        "like to cut some    "+
-        "wood for me? You can"+
-        "find it outisde.",
+        "Boi, you're still   "+
+        "around? Its freezing"+
+        "cold. Make yourself "+
+        "useful and cut wood "+
+        "or whatever.        "+
+        "Where's my damn beer",
 
         "The wood is outside."+
-        "Go and cut it!",
+        "Go and cut it!      "+
+        "stupid brat         ",
 
         "You have cut        "+
-        "the wood",
+        "the wood            ",
 
-        "Thanks alot Ninjaboy"+
-        "now i need Milk.    "+
-        "Be my bitch."
+        "And now bring me    "+
+        "my fkn beer from    "+
+        "outside             "
     ]
+
+    this.state = 2;
 }
 
 Quest_01.prototype.startQuest = function(){
     this.aktiv = true;
 
-    this.questManager.subscribe('grandpa', this._grandpaDialog, this);
-    this.questManager.subscribe('quest_wood', this._woodDialog, this);
+    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this._grandpaDialog, this);
+
+    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_wood', this._woodDialog, this);
+    this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'quest_wood', this._woodCreate, this);
 }
 
 Quest_01.prototype.finishQuest = function(){
     this.aktiv = false;
     this.finished = true;
     stage.questManager.questList[1].startQuest();
-    this.questManager.unsubscribe('grandpa', this);
-    this.questManager.unsubscribe('quest_wood', this);
+    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this);
+    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_wood', this);
 }
 
 Quest_01.prototype._grandpaDialog = function(quest){
@@ -55,6 +61,12 @@ Quest_01.prototype._woodDialog = function(quest){
     if(quest.state == 1){
         stage.dialogManager.startDialog(quest.dialogs[2]);
         quest.state++;
+        this.frame = 28;
+    }
+}
+
+Quest_01.prototype._woodCreate = function(quest){
+    if(quest.state >= 2){
         this.frame = 28;
     }
 }

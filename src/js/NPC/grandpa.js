@@ -10,5 +10,5 @@ Grandpa.prototype = Object.create(Phaser.Sprite.prototype);
 Grandpa.prototype.constructor = Grandpa;
 
 Grandpa.prototype.dialog = function(other){
-    stage.questManager.notifyDialog(this.name, this);
+    stage.questManager.notifyEvent(stage.questManager.EVENT_TYPES.DIALOG, this.name, this);
 }

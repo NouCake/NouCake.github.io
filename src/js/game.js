@@ -57,7 +57,6 @@ let stage = {
         this.mapLoader.addObjectsFromMap(this.map, this.objects);
         if(x){
             this.player.SET(x, y);
-            console.log(x, y);
         }
         this.sortObjects();
     },
