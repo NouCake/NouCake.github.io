@@ -6,8 +6,8 @@ Input = function(){
 	game.input.keyboard.addKey(Phaser.Keyboard.ENTER),
 	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)];
 
-	this.mobile = true;
-	if(true){
+	this.mobile = false;
+	if(game.device.desktop == false){
 		this.mobile = true;
 		this._createMobileButtons();
 	}
