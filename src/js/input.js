@@ -6,8 +6,8 @@ Input = function(){
 	game.input.keyboard.addKey(Phaser.Keyboard.ENTER),
 	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)];
 
-	this.mobile = false;
-	if(game.device.desktop == false){
+	this.mobile = true;
+	if(true){
 		this.mobile = true;
 		this._createMobileButtons();
 	}
@@ -36,27 +36,27 @@ Input.prototype._createMobileButtons = function(){
 
 	Input.prototype.dpad = {};
 
-	this.dpad.up = ui.create(0, 0, "dpad", 0);
+	this.dpad.up = stage.ui.create(0, 0, "dpad", 0);
 	this.dpad.up.frameUp = 0;
 	this.dpad.up.frameDown = 1;
 
-	this.dpad.down = ui.create(0, 0, "dpad", 0);
+	this.dpad.down = stage.ui.create(0, 0, "dpad", 0);
 	this.dpad.down.frameUp = 0;
 	this.dpad.down.frameDown = 1;
 
-	this.dpad.left = ui.create(0, 0, "dpad", 0);
+	this.dpad.left = stage.ui.create(0, 0, "dpad", 0);
 	this.dpad.left.frameUp = 0;
 	this.dpad.left.frameDown = 1;
 
-	this.dpad.right = ui.create(0, 0, "dpad", 0);
+	this.dpad.right = stage.ui.create(0, 0, "dpad", 0);
 	this.dpad.right.frameUp = 0;
 	this.dpad.right.frameDown = 1;
 
-	this.dpad.action = ui.create(0, 0, "dpad", 2);
+	this.dpad.action = stage.ui.create(0, 0, "dpad", 2);
 	this.dpad.action.frameUp = 2;
 	this.dpad.action.frameDown = 3;
 
-	this.dpad.dialog = ui.create(0, 0, "dpad", 4);
+	this.dpad.dialog = stage.ui.create(0, 0, "dpad", 4);
 	this.dpad.dialog.frameUp = 4;
 	this.dpad.dialog.frameDown = 5;
 
@@ -115,22 +115,22 @@ Input.prototype.desktopUpdate = function(){
 }
 
 Input.prototype.mobileUpdate = function(){
-	this.left = _collidesWith(this.dpad.left);
+	this.left = this._collidesWith(this.dpad.left);
 	this.dpad.left.frame = this.left ? this.dpad.left.frameDown : this.dpad.left.frameUp;
 
-	this.right = _collidesWith(this.dpad.right);
+	this.right = this._collidesWith(this.dpad.right);
 	this.dpad.right.frame = this.right ? this.dpad.right.frameDown : this.dpad.right.frameUp;
 
-	this.up = _collidesWith(this.dpad.up);
+	this.up = this._collidesWith(this.dpad.up);
 	this.dpad.up.frame = this.up ? this.dpad.up.frameDown : this.dpad.up.frameUp;
 
-	this.down = _collidesWith(this.dpad.down);
+	this.down = this._collidesWith(this.dpad.down);
 	this.dpad.down.frame = this.down ? this.dpad.down.frameDown : this.dpad.down.frameUp;
 
-	this.action = _collidesWith(this.dpad.action);
+	this.action = this._collidesWith(this.dpad.action);
 	this.dpad.action.frame = this.action ? this.dpad.action.frameDown : this.dpad.action.frameUp;
 
-	this.dialog = _collidesWith(this.dpad.dialog);
+	this.dialog = this._collidesWith(this.dpad.dialog);
 	this.dpad.dialog.frame = this.dialog ? this.dpad.dialog.frameDown : this.dpad.dialog.frameUp;
 }
 

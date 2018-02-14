@@ -6,6 +6,7 @@ let stage = {
         game.load.spritesheet('grandpa', 'src/assets/grandfather.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
         game.load.spritesheet('misc', 'src/assets/misc.png', 8, 8);
+        game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);
         game.load.tilemap('map_01', 'src/assets/maps/map_01.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map_03', 'src/assets/maps/map_03.json', null, Phaser.Tilemap.TILED_JSON);
     },

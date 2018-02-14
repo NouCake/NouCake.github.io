@@ -21,7 +21,7 @@ Quest_01 = function(questManager){
         "outside             "
     ]
 
-    this.state = 2;
+    this.state = 0;
 }
 
 Quest_01.prototype.startQuest = function(){
