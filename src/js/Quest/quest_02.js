@@ -23,7 +23,7 @@ Quest_02 = function(questManager){
     ];
 
     this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'quest_02_trigger', this._triggerCreate, this);
-    this.state = 0;
+    this.state = 1;
 }
 
 Quest_02.prototype.startQuest = function(){

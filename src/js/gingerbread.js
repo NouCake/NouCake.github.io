@@ -3,18 +3,26 @@
 let Gingerbread = {
 	physicBodies: [],
 	debug: false,
+	paused: false,
 	init: function(state){
 		this.state = state;
 	},
 	addPhysics: function(object){
 		this.physicBodies.push(object);
 		object.ginger = this.createBody(object);
+		if(object.events){
+			object.events.onDestroy.add(function(object){
+				Gingerbread.remove(object);
+			})
+		}
 	},
 	update: function(){
-		for(obj in this.physicBodies){
-			this.updateUnit.call(this.physicBodies[obj]);
+		if(!this.paused){
+			for(obj in this.physicBodies){
+				this.updateUnit.call(this.physicBodies[obj]);
+			}
+			this.collisionDetection();
 		}
-		this.collisionDetection();
 	},
 	updateUnit: function(){
 		if(this.previousPosition) this.previousPosition.set(this.x, this.y);
@@ -23,10 +31,6 @@ let Gingerbread = {
 		if(this.ginger.debug){
 			this.ginger.debug.x = this.x;
 			this.ginger.debug.y = this.y;
-		}
-		if(this.destroyPhase){
-			console.log("Gingerbread destroyPhase");
-			Gingerbread.remove(this);
 		}
 	},
 	collisionDetection: function(){
@@ -72,8 +76,6 @@ let Gingerbread = {
 		}
 	},
 	collides: function(a, b){
-		if(!a || !b)
-			return false;
 		if( a.ginger.origin.x + a.x + a.ginger.width >= b.ginger.origin.x + b.x &&
 			a.ginger.origin.x + a.x <= b.ginger.origin.x + b.x + b.ginger.width &&
 			a.ginger.origin.y + a.y + a.ginger.height >= b.ginger.origin.y + b.y &&

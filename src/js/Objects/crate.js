@@ -3,7 +3,7 @@ Crate = function(x, y){
 
     Gingerbread.addPhysics(this);
     this.ginger.setSize(12, 12);
-    this.ginger.setOrigin(2, 3);
+    this.ginger.setOrigin(1, 3);
     this._bounded = false;
 }
 

@@ -48,10 +48,12 @@ let stage = {
         Gingerbread.clearList(function(obj){
             return obj == stage.player || obj == stage.player.dialogHitbox
         })
+        
 
         if(this.map){
             this.map.groundLayer.destroy();
             this.map.topLayer.destroy();
+            this.map.destroy();
         }
         
         this.map = this.mapLoader.loadMap(key);
@@ -70,9 +72,11 @@ let stage = {
     },
     pauseGame: function(){
         this.objects.paused = true;
+        Gingerbread.paused = true;
     },
     resumeGame: function(){
         this.objects.paused = false;
+        Gingerbread.paused = false;
     },
     sortObjects: function(){
         game.world.bringToTop(this.objects);

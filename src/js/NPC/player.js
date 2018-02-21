@@ -1,26 +1,22 @@
-function Player(){
-    Phaser.Sprite.call(this, game, 20, 20, "player");
+Player = function(){
+    NPC.call(this, 20, 20, "player", true);
 
-    Gingerbread.addPhysics(this);
     this.ginger.setSize(7, 9);
     this.ginger.setOrigin(-4, -5);
     this.ginger.collidesWithMap = true;
 
     stage.input.addButton(4, this._onDialogPressed);
-    this._addAnimations();
     this._addDialogHitbox();
 
     this.name = "Player";
 
     this.anchor.set(0.5, 0.5);
-    this._state = this._STATES.IDLE;
     this._directionFreezed = false;
     this._maxSpeed = 75;
-    this._direction = 0;
     this.health = 6;
 }
 
-Player.prototype = Object.create(Phaser.Sprite.prototype)
+Player.prototype = Object.create(NPC.prototype)
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
@@ -70,12 +66,6 @@ Player.prototype.inputUpdate = function(){
 
 }
 
-Player.prototype.animationUpdate = function(){
-    //console.log(this);
-    this.animations.play(this._getCurrentAnimation().name, 8);
-    this.scale.x = this._direction == 3 ? -1 : 1;
-}
-
 Player.prototype.boundedUpdate = function(){
     if(this._bounded){
         this._bounded.ginger.speed.x = this.ginger.speed.x;
@@ -114,25 +104,9 @@ Player.prototype.unbindBoundedObject = function(){
     this._directionFreezed = false;
 }
 
-Player.prototype._getCurrentAnimation = function(){
-    return this.animations.getAnimation(this._state + this._direction);
-}
-
 Player.prototype._changeDirection = function(dir){
     if(!this._directionFreezed)
         this._direction = dir;
-}
-
-Player.prototype._addAnimations = function(){
-    this.animations.add("idle_0", [0]); //down
-    this.animations.add("idle_1", [2]); //left
-    this.animations.add("idle_2", [1]); //up
-    this.animations.add("idle_3", [2]); //right
-
-    this.animations.add("walk_0", [3,0,6,0]); //down
-    this.animations.add("walk_1", [5,2,8,2]); //left
-    this.animations.add("walk_2", [4,1,7,1]); //up
-    this.animations.add("walk_3", [5,2,8,2]); //right
 }
 
 Player.prototype._addDialogHitbox = function(){
@@ -154,7 +128,10 @@ Player.prototype._addDialogHitbox = function(){
 
 	dialogHitbox.update = function(){
 		this.x = this.player.x + 8 * DIRECTION_AS_POINT[this.player._direction].x;
-		this.y = this.player.y + 8 * DIRECTION_AS_POINT[this.player._direction].y;
+        this.y = this.player.y + 8 * DIRECTION_AS_POINT[this.player._direction].y;
+        if(this.mark && !this.mark.alive){
+            this.mark = null;
+        }
 	}
 }
 
@@ -170,9 +147,4 @@ Player.prototype.SET = function(x, y){
         stage.player.x = x + stage.player.width * stage.player.anchor.x;
         stage.player.y = y + stage.player.height * stage.player.anchor.y;
     }
-}
-
-Player.prototype._STATES = {
-    IDLE: "idle_",
-    WALK: "walk_"
 }

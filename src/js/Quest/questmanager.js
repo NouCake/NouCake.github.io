@@ -36,12 +36,11 @@ QuestManager.prototype.unsubscribe = function(event, key, quest){
 }
 
 QuestManager.prototype.notifyEvent = function(event, key, object, other){
-    console.log("notified", key);
+    //console.log("notified", key);
     let i = this.subscribers.length;
     while(i--) {
         if(this.subscribers[i].key == key &&
             this.subscribers[i].event == event){
-                console.log("yes", key);
                 this.subscribers[i].callback.call(object, this.subscribers[i].quest, other);
             }
     }

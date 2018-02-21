@@ -3,39 +3,75 @@ NPC = function(x, y, key, animated){
 
     Gingerbread.addPhysics(this);
     this._direction = 0;
+    this._state = this._STATES.IDLE;
+    this._frameRate = 8;
+    this._speed = 25;
     if(animated){
-        this._aniTimer = 0;
-        this._maxAniTime = 500;
-        this._timer = 0;
+        this._addAnimations();
     }
+    this._walkTimer = 0;
 }
+
 NPC.prototype = Object.create(Phaser.Sprite.prototype);
 NPC.prototype.constructor = NPC;
 
-NPC.prototype.aniamte = function(){
-    if(this._direction == 3){
-        this._direction = 2;
-        this.scale.x = -1;
-        this.anchor.x = 1;
-    } else {
-        this.scale.x = 1;
-        this.anchor.x = 0;
-    }
-
-    if(this._aniTimer % this._maxAniTime * 4 <= this._maxAniTime * 1){
-        this.frame = this._direction;
-    } else if(this._aniTimer % this._maxAniTime * 4 <= this._maxAniTime * 2){
-        this.frame = this._direction + 3;
-    } else if(this._aniTimer % this._maxAniTime * 4 <= this._maxAniTime * 3){
-        this.frame = this._direction;
-    } else {
-        this.frame = this._direction + 6;
-    }
-
-    this._aniTimer += game.time.elapsedMS;
-
-    if(this.scale.x == -1){
-        this._direction = 3;
-    }
+NPC.prototype.update = function(){
+    this.animationUpdate();
 }
 
+NPC.prototype.walk = function(){
+
+}
+
+NPC.prototype.onCollision = function(other){
+    this.x = this.previousPosition.x;
+	this.y = this.previousPosition.y;
+}
+
+NPC.prototype._STATES = {
+    IDLE: "idle_",
+    WALK: "walk_"
+}
+
+NPC.prototype._addAnimations = function(){
+    this.animations.add("idle_0", [0]); //down
+    this.animations.add("idle_1", [2]); //left
+    this.animations.add("idle_2", [1]); //up
+    this.animations.add("idle_3", [2]); //right
+
+    this.animations.add("walk_0", [3,0,6,0]); //down
+    this.animations.add("walk_1", [5,2,8,2]); //left
+    this.animations.add("walk_2", [4,1,7,1]); //up
+    this.animations.add("walk_3", [5,2,8,2]); //right
+}
+
+NPC.prototype._getCurrentAnimation = function(){
+    return this.animations.getAnimation(this._state + this._direction);
+}
+
+NPC.prototype.animationUpdate = function(){
+    //console.log(this);
+    this.animations.play(this._getCurrentAnimation().name, this._frameRate);
+    this.scale.x = this._direction == 3 ? -1 : 1;
+}
+
+NPC.prototype.walk = function(distanceInTiles, direction){
+    this._direction = direction;
+    this.walkTimer = distanceInTiles * TILE_SIZE / this._speed;
+
+}
+
+NPC.prototype._walkUpdate = function(){
+    if(this._state == this._STATES.WALK){
+        if(this._walkTimer > 0){
+            this.ginger.speed.set(this.speed * DIRECTION_AS_POINT[this._direction],
+                this._speed * DIRECTION_AS_POINT[this._direction])
+        } else {
+            this.ginger.speed.set(0);
+            this._walkTimer = 0;
+            this._state = this._STATES.IDLE;
+        }
+        
+    }
+    this._walkTimer = game.time.elapsedMS;
+}
