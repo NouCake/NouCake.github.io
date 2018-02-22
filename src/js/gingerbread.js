@@ -105,12 +105,11 @@ let Gingerbread = {
 			x: 0,
 			y: 0,
 			set: function(x, y){
-				if(!y){
+				if(arguments.length == 1){
 					//console.log(this);
 					this.x = x;
 					this.y = x;
 				} else {
-					//console.log(this);
 					this.x = x;
 					this.y = y;
 				}

@@ -5,6 +5,7 @@ Grandpa = function(x, y){
     this.ginger.setOrigin(4, 1);
     this.name = 'grandpa';
 
+    this.walk(1, 1);
     console.log(this);
 }
 

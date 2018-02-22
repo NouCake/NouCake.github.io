@@ -2,8 +2,8 @@ let stage = {
     preload: function(){
         game.load.bitmapFont('font', 'src/assets/font/font.png', 'src/assets/font/font.fnt');
         game.load.image('dialog', 'src/assets/dialog.png');
-        game.load.spritesheet('player', 'src/assets/player.png', 16, 16);
-        game.load.spritesheet('grandpa', 'src/assets/grandfather.png', 16, 16);
+        game.load.spritesheet('player', 'src/assets/spritesheets/player.png', 16, 16);
+        game.load.spritesheet('grandpa', 'src/assets/spritesheets/grandfather.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
         game.load.spritesheet('misc', 'src/assets/misc.png', 8, 8);
         game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);

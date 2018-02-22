@@ -1,7 +1,7 @@
 Player = function(){
     NPC.call(this, 20, 20, "player", true);
 
-    this.ginger.setSize(7, 9);
+    this.ginger.setSize(7, 10);
     this.ginger.setOrigin(-4, -5);
     this.ginger.collidesWithMap = true;
 

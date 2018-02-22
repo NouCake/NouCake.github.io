@@ -17,10 +17,7 @@ NPC.prototype.constructor = NPC;
 
 NPC.prototype.update = function(){
     this.animationUpdate();
-}
-
-NPC.prototype.walk = function(){
-
+    this._walkUpdate();
 }
 
 NPC.prototype.onCollision = function(other){
@@ -57,21 +54,24 @@ NPC.prototype.animationUpdate = function(){
 
 NPC.prototype.walk = function(distanceInTiles, direction){
     this._direction = direction;
-    this.walkTimer = distanceInTiles * TILE_SIZE / this._speed;
-
+    this._walkTimer = distanceInTiles * TILE_SIZE / this._speed * 1000;
+    this._state = this._STATES.WALK;
 }
 
 NPC.prototype._walkUpdate = function(){
     if(this._state == this._STATES.WALK){
         if(this._walkTimer > 0){
-            this.ginger.speed.set(this.speed * DIRECTION_AS_POINT[this._direction],
-                this._speed * DIRECTION_AS_POINT[this._direction])
+            this.ginger.speed.set(
+                this._speed * DIRECTION_AS_POINT[this._direction].x,
+                this._speed * DIRECTION_AS_POINT[this._direction].y)
         } else {
             this.ginger.speed.set(0);
             this._walkTimer = 0;
             this._state = this._STATES.IDLE;
+            this.x = Math.round(this.x);
+            this.y = Math.round(this.y);
         }
-        
+            
+        this._walkTimer -= game.time.elapsedMS;
     }
-    this._walkTimer = game.time.elapsedMS;
 }
