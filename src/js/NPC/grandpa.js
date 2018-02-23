@@ -1,12 +1,9 @@
 Grandpa = function(x, y){
     NPC.call(this, x, y, 'grandpa', true);
 
-    this.ginger.setSize(8, 14);
-    this.ginger.setOrigin(4, 1);
+    this.ginger.setSize(9, 14);
+    this.ginger.setOrigin(3, 1);
     this.name = 'grandpa';
-
-    this.walk(1, 1);
-    console.log(this);
 }
 
 Grandpa.prototype = Object.create(NPC.prototype);

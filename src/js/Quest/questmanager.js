@@ -6,7 +6,7 @@ QuestManager = function(){
     this.questList.push(new Quest_02(this));
     this.questList.push(new Quest_03(this));
 
-    this.questList[0].startQuest();
+    this.questList[2].startQuest();
 }
 
 QuestManager.prototype.update = function(){

@@ -9,6 +9,7 @@ DialogManager = function(){
     this._currentLine = 0;
     this._atLineFeed = false;
     this._finish = false;
+    this.resumeAfterDialog = true;
 
     this.blinky = new Phaser.Sprite(game, this.width-16, this.height-10, 'misc', 4);
     this.line1 = new Phaser.BitmapText(game, 8, 4,                  'font', this.message, this._fontSize, "left");
@@ -23,7 +24,11 @@ DialogManager = function(){
 DialogManager.prototype = Object.create(Phaser.Sprite.prototype);
 DialogManager.prototype.constructor = DialogManager;
 
-DialogManager.prototype.startDialog = function(text){
+DialogManager.prototype.startDialog = function(text, resumeAfterDialog){
+    if(resumeAfterDialog === undefined)
+        resumeAfterDialog = true;
+    this.resumeAfterDialog = resumeAfterDialog;
+    
     if(this.running)
         return;
     this.message = text;
@@ -39,7 +44,8 @@ DialogManager.prototype.startDialog = function(text){
     this._dialogSpeed = 35;
     this._maxChars = 20;
 
-    stage.pauseGame();
+    if(this.resumeAfterDialog)
+        stage.pauseGame();
 }
 
 DialogManager.prototype.nextLine = function(){
@@ -59,8 +65,10 @@ DialogManager.prototype.nextLine = function(){
         if(dialogManager._finish){
             dialogManager.running = false;
 			dialogManager.visible = false;
-			dialogManager.blinky.visible = false;
-			stage.resumeGame();
+            dialogManager.blinky.visible = false;
+            if(dialogManager.resumeAfterDialog){
+                stage.resumeGame();
+            }
         }
     }
 }

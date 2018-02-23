@@ -2,14 +2,23 @@ NPC = function(x, y, key, animated){
     Phaser.Sprite.call(this, game, x, y, key);
 
     Gingerbread.addPhysics(this);
+    this.anchor.set(0.5, 0.5);
+    this.offsetX = this.width * 0.5;
+    this.offsetY = this.height *0.5;
+
     this._direction = 0;
-    this._state = this._STATES.IDLE;
+    this._state = NPC.STATES.IDLE;
     this._frameRate = 8;
     this._speed = 25;
     if(animated){
         this._addAnimations();
     }
     this._walkTimer = 0;
+}
+
+NPC.STATES = {
+    IDLE: "idle_",
+    WALK: "walk_"
 }
 
 NPC.prototype = Object.create(Phaser.Sprite.prototype);
@@ -23,11 +32,6 @@ NPC.prototype.update = function(){
 NPC.prototype.onCollision = function(other){
     this.x = this.previousPosition.x;
 	this.y = this.previousPosition.y;
-}
-
-NPC.prototype._STATES = {
-    IDLE: "idle_",
-    WALK: "walk_"
 }
 
 NPC.prototype._addAnimations = function(){
@@ -55,11 +59,11 @@ NPC.prototype.animationUpdate = function(){
 NPC.prototype.walk = function(distanceInTiles, direction){
     this._direction = direction;
     this._walkTimer = distanceInTiles * TILE_SIZE / this._speed * 1000;
-    this._state = this._STATES.WALK;
+    this._state = NPC.STATES.WALK;
 }
 
 NPC.prototype._walkUpdate = function(){
-    if(this._state == this._STATES.WALK){
+    if(this._state == NPC.STATES.WALK){
         if(this._walkTimer > 0){
             this.ginger.speed.set(
                 this._speed * DIRECTION_AS_POINT[this._direction].x,
@@ -67,7 +71,7 @@ NPC.prototype._walkUpdate = function(){
         } else {
             this.ginger.speed.set(0);
             this._walkTimer = 0;
-            this._state = this._STATES.IDLE;
+            this._state = NPC.STATES.IDLE;
             this.x = Math.round(this.x);
             this.y = Math.round(this.y);
         }

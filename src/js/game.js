@@ -4,6 +4,7 @@ let stage = {
         game.load.image('dialog', 'src/assets/dialog.png');
         game.load.spritesheet('player', 'src/assets/spritesheets/player.png', 16, 16);
         game.load.spritesheet('grandpa', 'src/assets/spritesheets/grandfather.png', 16, 16);
+        game.load.spritesheet('evilman', 'src/assets/spritesheets/ghost.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
         game.load.spritesheet('misc', 'src/assets/misc.png', 8, 8);
         game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);
@@ -35,6 +36,8 @@ let stage = {
         this.healthbar = new Healthbar(this.player);
         this.dialogManager = new DialogManager();
         this.questManager = new QuestManager();
+        this.actionScriptManager = new ActionScriptManager();
+
 
         this.ui.add(this.dialogManager);
         this.ui.add(this.healthbar);
@@ -65,6 +68,7 @@ let stage = {
     },
     update: function(){
         this.input.update();
+        this.actionScriptManager.update();
         Gingerbread.update();
     },
     render: function(){

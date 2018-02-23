@@ -55,9 +55,9 @@ Player.prototype.inputUpdate = function(){
 
     if(inputs == 0){
         this.ginger.speed.set(0, 0);
-        this._state = this._STATES.IDLE;
+        this._state = NPC.STATES.IDLE;
     } else {
-        this._state = this._STATES.WALK;
+        this._state = NPC.STATES.WALK;
     }
     if(inputs > 1){
         this.ginger.speed.setMagnitude(this._maxSpeed);
@@ -135,9 +135,10 @@ Player.prototype._addDialogHitbox = function(){
 	}
 }
 
-Player.prototype._onDialogPressed = function(){
-    if(stage.player.dialogHitbox.mark && !stage.dialogManager.running &&
+Player.prototype._onDialogPressed = function(){stage.actionScriptManager.startScript("script02");
+    if(!stage.player.parent.paused && stage.player.dialogHitbox.mark && !stage.dialogManager.running &&
         Gingerbread.collides(stage.player.dialogHitbox, stage.player.dialogHitbox.mark)){
+        stage.player.ginger.speed.set(0);
         stage.player.dialogHitbox.mark.dialog(stage.player);
     }
 }

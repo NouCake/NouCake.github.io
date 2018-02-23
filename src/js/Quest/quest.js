@@ -5,6 +5,9 @@ Quest = function(questManager){
     this.trigger = [];
 }
 
+Quest.prototype = Object.create(Object.prototype);
+Quest.prototype.constructor = Quest;
+
 Quest.prototype.update = function(){
 
 }

@@ -11,16 +11,11 @@ Quest_03 = function(questManager){
 
         "I found a Mushroom  "+
         "just " + (5-this.collected) + " more",
-
-        "I should turn back  ",
-
-        "What took you that  "+
-        "long? Moron.        ",
     ];
 
     this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'mushroom', this._mushroomCreate, this);
     this.state = 0;
-    this.collected = 0;
+    this.collected = 3;
 }
 
 Quest_03.prototype.startQuest = function(){
@@ -48,9 +43,6 @@ Quest_03.prototype._grandpaDialog = function(quest){
         case 1:
             stage.dialogManager.startDialog(quest.dialogs[1]);
             break;
-        case 2:
-            stage.dialogManager.startDialog(quest.dialogs[4]);
-            quest.finishQuest();
     }
 }
 
@@ -65,9 +57,9 @@ Quest_03.prototype._mushroomDialog = function(quest){
     if(quest.collected < 4){
         stage.dialogManager.startDialog(quest.dialogs[2]);
     } else {
-        stage.dialogManager.startDialog(quest.dialogs[3]);
-        quest.state++;
+        stage.actionScriptManager.startScript("script01");
     }
     quest.trigger[this.properties.id] = true;
     this.destroy();
+    
 }
