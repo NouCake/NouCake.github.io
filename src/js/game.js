@@ -5,8 +5,9 @@ let stage = {
         game.load.spritesheet('player', 'src/assets/spritesheets/player.png', 16, 16);
         game.load.spritesheet('grandpa', 'src/assets/spritesheets/grandfather.png', 16, 16);
         game.load.spritesheet('evilman', 'src/assets/spritesheets/ghost.png', 16, 16);
+        game.load.spritesheet('monster', 'src/assets/spritesheets/monsters.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
-        game.load.spritesheet('misc', 'src/assets/misc.png', 8, 8);
+        game.load.spritesheet('objects', 'src/assets/objects.png', 16, 16);
         game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);
         game.load.tilemap('map_01', 'src/assets/maps/map_01.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map_03', 'src/assets/maps/map_03.json', null, Phaser.Tilemap.TILED_JSON);
@@ -18,6 +19,8 @@ let stage = {
         game.stage.backgroundColor = '#2d2d2d';
         game.time.advancedTiming = true;
         game.camera.roundPx = true;
+        
+        this.paused = false;
 
         stage.objects = new Phaser.Group(game);
         this.objects.name = "Objects";
@@ -42,15 +45,18 @@ let stage = {
         this.ui.add(this.dialogManager);
         this.ui.add(this.healthbar);
 
+        this.objects.add(this.player);
+
         this.loadNewMap('map_03');
     },
     loadNewMap: function(key, x, y){
-        this.objects.removeAll();
-        this.objects.add(this.player);
-
-        Gingerbread.clearList(function(obj){
-            return obj == stage.player || obj == stage.player.dialogHitbox
-        })
+        let i = this.objects.length;
+        while(i--){
+            if(this.objects.getAt(i) != this.player){
+                console.log("DELETE", this.objects.getAt(i));
+                this.objects.getAt(i).destroy();
+            }
+        }
         
 
         if(this.map){
@@ -72,13 +78,14 @@ let stage = {
         Gingerbread.update();
     },
     render: function(){
-
     },
     pauseGame: function(){
+        this.paused = true;
         this.objects.paused = true;
         Gingerbread.paused = true;
     },
     resumeGame: function(){
+        this.paused = false;
         this.objects.paused = false;
         Gingerbread.paused = false;
     },

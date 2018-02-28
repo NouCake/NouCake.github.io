@@ -3,17 +3,17 @@ QuestObject = function(x, y, properties){
     this.name = properties.name;
     this.properties = properties;
 
-    Gingerbread.addPhysics(this);
-    stage.questManager.notifyEvent(stage.questManager.EVENT_TYPES.CREATE, this.name, this);
+    Gingerbread.add(this);
+    stage.questManager.notifyEvent(QuestManager.EVENTS.CREATE, this.name, this);
 }
 
 QuestObject.prototype = Object.create(Phaser.Sprite.prototype);
 QuestObject.prototype.constructor = QuestObject;
 
 QuestObject.prototype.dialog = function(other){
-    stage.questManager.notifyEvent(stage.questManager.EVENT_TYPES.DIALOG, this.name, this);
+    stage.questManager.notifyEvent(QuestManager.EVENTS.DIALOG, this.name, this);
 }
 
 QuestObject.prototype.onCollision = function(other){
-    stage.questManager.notifyEvent(stage.questManager.EVENT_TYPES.COLLISION, this.name, this, other);
+    stage.questManager.notifyEvent(QuestManager.EVENTS.COLLISION, this.name, this, other);
 }

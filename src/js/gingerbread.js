@@ -1,81 +1,23 @@
 //version 1.3
-
-let Gingerbread = {
-	physicBodies: [],
-	debug: false,
+Gingerbread = {
+	running: false,
 	paused: false,
-	init: function(state){
-		this.state = state;
+	attachedBodies: [],
+	init: function(world){
+		this.running = true;
+		this.world = world;
 	},
-	addPhysics: function(object){
-		this.physicBodies.push(object);
-		object.ginger = this.createBody(object);
+	add: function(object){
+		object.ginger = new Gingerbread.Body(object);
+		this.attachedBodies.push(object);
 		if(object.events){
 			object.events.onDestroy.add(function(object){
 				Gingerbread.remove(object);
 			})
 		}
 	},
-	update: function(){
-		if(!this.paused){
-			for(obj in this.physicBodies){
-				this.updateUnit.call(this.physicBodies[obj]);
-			}
-			this.collisionDetection();
-		}
-	},
-	updateUnit: function(){
-		if(this.previousPosition) this.previousPosition.set(this.x, this.y);
-		this.x += this.ginger.speed.x * game.time.elapsed/1000;
-		this.y += this.ginger.speed.y * game.time.elapsed/1000;
-		if(this.ginger.debug){
-			this.ginger.debug.x = this.x;
-			this.ginger.debug.y = this.y;
-		}
-	},
-	collisionDetection: function(){
-		this.collisionWithObjects();
-		this.collisionWithMap();
-		this.collisionWithTrigger();
-	},
-	collisionWithObjects: function(){
-		for(a = 0; a < this.physicBodies.length-1; a++){
-			for(b = a+1; b < this.physicBodies.length; b++){
-				if(!(this.physicBodies[a].ginger.trigger || this.physicBodies[b].ginger.trigger) && this.collides(this.physicBodies[a], this.physicBodies[b])){
-					if(this.physicBodies[a].onCollision){
-						this.physicBodies[a].onCollision(this.physicBodies[b]);
-					}
-					if(this.physicBodies[b].onCollision){
-						this.physicBodies[b].onCollision(this.physicBodies[a]);
-					}
-				}
-			}
-		}
-	},
-	collisionWithMap: function(){
-		mapColliders = this.physicBodies.filter((other) => other.ginger.collidesWithMap);
-		for(obj in mapColliders){
-			for(block in this.state.map.collisionMap){
-				if(this.collides(mapColliders[obj], this.state.map.collisionMap[block])){
-					mapColliders[obj].onCollision(this.state.map.collisionMap[block]);
-				}
-			}
-		}
-	},
-	collisionWithTrigger: function(){
-		for(a = 0; a < this.physicBodies.length; a++){
-			if(this.physicBodies[a].ginger.trigger)
-				for(b = 0; b < this.physicBodies.length; b++){
-					if(a != b && !this.physicBodies[b].ginger.trigger){
-						if(this.collides(this.physicBodies[a], this.physicBodies[b])){
-							//console.log(this.list[b].key);
-							this.physicBodies[a].onCollision(this.physicBodies[b]);
-						}
-					}
-				}
-		}
-	},
 	collides: function(a, b){
+		if( a.ginger.aktiv && b.ginger.aktiv)
 		if( a.ginger.origin.x + a.x + a.ginger.width >= b.ginger.origin.x + b.x &&
 			a.ginger.origin.x + a.x <= b.ginger.origin.x + b.x + b.ginger.width &&
 			a.ginger.origin.y + a.y + a.ginger.height >= b.ginger.origin.y + b.y &&
@@ -85,79 +27,122 @@ let Gingerbread = {
 		return false;
 	},
 	remove: function(object){
-		let i = this.physicBodies.length;
+		let i = this.attachedBodies.length;
 		while(i--){
-			if(object == this.physicBodies[i]){
-				delete this.physicBodies[i];
-				this.physicBodies = this.physicBodies.filter(obj => obj!=undefined);
-				console.log("gingerbread removed");
+			if(object == this.attachedBodies[i]){
+				delete this.attachedBodies[i];
+				this.attachedBodies = this.attachedBodies.filter(obj => obj!=undefined);
+				console.log("ginger removed");
 			}
 		}
-	},
-	createBody: function(object){
-		ginger = {};
-		ginger.width = object.width || 0;
-		ginger.height = object.height || 0;
-		ginger.origin = {x: 0, y: 0};
-		ginger.trigger = false;
-		ginger.collidesWithMap = false;
-		ginger.speed = {
-			x: 0,
-			y: 0,
-			set: function(x, y){
-				if(arguments.length == 1){
-					//console.log(this);
-					this.x = x;
-					this.y = x;
-				} else {
-					this.x = x;
-					this.y = y;
-				}
-			},
-			getCurrentSpeed: function(){
-				return Math.sqrt(this.x * this.x + this.y * this.y);
-			},
-			setMagnitude: function(speed){ //rename bedarf
-				modif = speed/this.getCurrentSpeed();
-				this.x *= modif;
-				this.y *= modif;
-			}
-		}
-		if(this.debug){
-			console.log("debugging");
-			ginger.debug = stage.objects.add(game.make.graphics(object.x, object.y));
-			ginger.debug.beginFill(0xFF0000);
-			ginger.debug.drawRect(0, 0, ginger.width, ginger.height);
-			ginger.debug.endFill();
-		}
-		ginger.setSize = function(width, height){
-			this.width = width;
-			this.height = height;
-			if(this.debug){
-				ginger.debug.clear();
-				ginger.debug.beginFill(0xFF0000);
-				ginger.debug.drawRect(this.origin.x, this.origin.y, this.width, this.height);
-				ginger.debug.endFill();
-			}
-
-		}
-		ginger.setOrigin = function(x, y, anchor){ //PLS CHANGE
-			this.origin.x = x;
-			this.origin.y = y;
-			if(anchor) {
-				this.origin.x -= anchor.x * object.width;
-				this.origin.y -= anchor.y * object.height;
-			}
-			if(this.debug){
-				this.debug.clear();
-				this.debug.beginFill(0xFF0000);
-				this.debug.drawRect(this.origin.x, this.origin.y, this.width, this.height);
-				this.debug.endFill();
-			}
-		}
-		return ginger;
 	},
 	clearList: function(filterFunction){
-		this.physicBodies = this.physicBodies.filter(filterFunction);
+		this.attachedBodies = this.attachedBodies.filter(filterFunction);
+	},
+	update: function(){
+		if(!this.paused && this.running){
+			for(obj in this.attachedBodies){
+				Gingerbread._updateUnit.call(this.attachedBodies[obj]);
+			}
+			Gingerbread._collisionDetection();
+		}
 	}
+}
+
+Gingerbread._updateUnit = function(){
+	if(this.previousPosition) this.previousPosition.set(this.x, this.y);
+	this.x += this.ginger.speed.x * game.time.elapsed/1000;
+	this.y += this.ginger.speed.y * game.time.elapsed/1000;
+	this.x += this.ginger._move.x;
+	this.y += this.ginger._move.y;
+	this.ginger._move.set(0);
+
+	if(this.ginger.debug){
+		this.ginger.debug.x = this.x;
+		this.ginger.debug.y = this.y;
+	}
+}
+
+Gingerbread._collisionDetection = function(){
+	this._collisionWithObjects();
+	this._collisionWithMap();
+	this._collisionWithTrigger();
+}
+
+Gingerbread._collisionWithObjects = function(){
+	for(a = 0; a < this.attachedBodies.length-1; a++){
+		for(b = a+1; b < this.attachedBodies.length; b++){
+			if(!(this.attachedBodies[a].ginger.trigger || this.attachedBodies[b].ginger.trigger) && this.collides(this.attachedBodies[a], this.attachedBodies[b])){
+				if(this.attachedBodies[a].onCollision){
+					this.attachedBodies[a].onCollision(this.attachedBodies[b]);
+				}
+				if(this.attachedBodies[b].onCollision){
+					this.attachedBodies[b].onCollision(this.attachedBodies[a]);
+				}
+			}
+		}
+	}
+}
+
+Gingerbread._collisionWithMap = function(){
+	let mapColliders = this.attachedBodies.filter((other) => other.ginger.collidesWithMap);
+	for(obj in mapColliders){
+		for(block in this.world.map.collisionMap){
+			if(this.collides(mapColliders[obj], this.world.map.collisionMap[block])){
+				mapColliders[obj].onCollision(this.world.map.collisionMap[block]);
+			}
+		}
+	}
+}
+
+Gingerbread._collisionWithTrigger = function(){
+	for(a = 0; a < this.attachedBodies.length; a++){
+		if(this.attachedBodies[a].ginger.trigger)
+			for(b = 0; b < this.attachedBodies.length; b++){
+				if(a != b && !this.attachedBodies[b].ginger.trigger){
+					if(this.collides(this.attachedBodies[a], this.attachedBodies[b])){
+						//console.log(this.list[b].key);
+						this.attachedBodies[a].onCollision(this.attachedBodies[b]);
+					}
+				}
+			}
+	}
+}
+
+
+
+Gingerbread.Body = function(parent){
+	this.parent = parent;
+
+	this.width = parent.width || 0;
+	this.height = parent.height || 0;
+
+	this.origin = new Phaser.Point(0, 0);
+	this.speed = new Phaser.Point(0, 0);
+	this._move = new Phaser.Point(0, 0);
+
+	this.aktiv = true;
+	this.trigger = false;
+	this.collidesWithMap = false;
+}
+
+Gingerbread.Body.prototype = Object.create(Object.prototype);
+Gingerbread.Body.prototype.constructor = Gingerbread.Body;
+
+Gingerbread.Body.prototype.setSize = function(width, height){
+	this.width = width;
+	this.height = height;
+}
+
+Gingerbread.Body.prototype.setOrigin = function(x, y, useAnchor){
+	this.origin.x = x-1;
+	this.origin.y = y-1;
+	if(useAnchor){
+		this.origin.x -= this.parent.anchor.x * this.parent.width;
+		this.origin.y -= this.parent.anchor.y * this.parent.width;
+	}
+}
+
+Gingerbread.Body.prototype.move = function(point){
+	this._move.copyFrom(point);
 }

@@ -11,7 +11,7 @@ DialogManager = function(){
     this._finish = false;
     this.resumeAfterDialog = true;
 
-    this.blinky = new Phaser.Sprite(game, this.width-16, this.height-10, 'misc', 4);
+    this.blinky = new Phaser.Sprite(game, this.width-16, this.height-10, 'objects', 4);
     this.line1 = new Phaser.BitmapText(game, 8, 4,                  'font', this.message, this._fontSize, "left");
     this.line2 = new Phaser.BitmapText(game, 8, 4 + this._fontSize, 'font', this.message, this._fontSize, "left");
     this.addChild(this.blinky);

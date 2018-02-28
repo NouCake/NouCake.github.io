@@ -5,8 +5,9 @@ QuestManager = function(){
     this.questList.push(new Quest_01(this));
     this.questList.push(new Quest_02(this));
     this.questList.push(new Quest_03(this));
+    this.questList.push(new Quest_04(this));
 
-    this.questList[2].startQuest();
+    this.questList[3].startQuest();
 }
 
 QuestManager.prototype.update = function(){
@@ -36,7 +37,7 @@ QuestManager.prototype.unsubscribe = function(event, key, quest){
 }
 
 QuestManager.prototype.notifyEvent = function(event, key, object, other){
-    //console.log("notified", key);
+    console.log("notified",event, key);
     let i = this.subscribers.length;
     while(i--) {
         if(this.subscribers[i].key == key &&
@@ -46,8 +47,8 @@ QuestManager.prototype.notifyEvent = function(event, key, object, other){
     }
 }
 
-QuestManager.prototype.EVENT_TYPES = {
-    CREATE: 0,
-    DIALOG: 1,
-    COLLISION: 2 
+QuestManager.EVENTS = {
+    CREATE: 'create',
+    DIALOG: 'dialog',
+    COLLISION: 'collision' 
 }

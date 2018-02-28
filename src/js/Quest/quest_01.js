@@ -27,18 +27,18 @@ Quest_01 = function(questManager){
 Quest_01.prototype.startQuest = function(){
     this.aktiv = true;
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this._grandpaDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this._grandpaDialog, this);
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_wood', this._woodDialog, this);
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'quest_wood', this._woodCreate, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'quest_wood', this._woodDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.CREATE, 'quest_wood', this._woodCreate, this);
 }
 
 Quest_01.prototype.finishQuest = function(){
     this.aktiv = false;
     this.finished = true;
     stage.questManager.questList[1].startQuest();
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this);
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_wood', this);
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this);
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'quest_wood', this);
 }
 
 Quest_01.prototype._grandpaDialog = function(quest){

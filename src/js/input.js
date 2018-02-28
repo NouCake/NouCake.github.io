@@ -6,9 +6,8 @@ Input = function(){
 	game.input.keyboard.addKey(Phaser.Keyboard.ENTER),
 	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)];
 
-	this.mobile = false;
-	if(game.device.desktop == false){
-		this.mobile = true;
+	this.mobile = !game.device.desktop;
+	if(this.mobile){
 		this._createMobileButtons();
 	}
 }
@@ -132,6 +131,7 @@ Input.prototype.mobileUpdate = function(){
 
 	this.dialog = this._collidesWith(this.dpad.dialog);
 	this.dpad.dialog.frame = this.dialog ? this.dpad.dialog.frameDown : this.dpad.dialog.frameUp;
+
 }
 
 Input.prototype._collidesWith = function(button){

@@ -50,6 +50,6 @@ _Block = function(x, y){
     block.width = TILE_SIZE;
     block.height = TILE_SIZE;
     
-    block.ginger = Gingerbread.createBody(block);
+    block.ginger = new Gingerbread.Body(block);
     return block;
 }

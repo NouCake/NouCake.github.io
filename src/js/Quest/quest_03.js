@@ -1,6 +1,10 @@
 Quest_03 = function(questManager){
     Quest.call(this, questManager);
 
+    this.questManager.subscribe(QuestManager.EVENTS.CREATE, 'mushroom', this._mushroomCreate, this);
+    this.state = 0;
+    this.collected = 0;
+
     this.dialogs = [
         "You will find them  "+
         "on the forrest on   "+
@@ -12,17 +16,13 @@ Quest_03 = function(questManager){
         "I found a Mushroom  "+
         "just " + (5-this.collected) + " more",
     ];
-
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'mushroom', this._mushroomCreate, this);
-    this.state = 0;
-    this.collected = 3;
 }
 
 Quest_03.prototype.startQuest = function(){
     this.aktiv = true;
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this._grandpaDialog, this);
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'mushroom', this._mushroomDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this._grandpaDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'mushroom', this._mushroomDialog, this);
 
 }
 
@@ -30,8 +30,10 @@ Quest_03.prototype.finishQuest = function(){
     this.aktiv = false;
     this.finish = true;
 
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this);
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'mushroom', this);
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this);
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'mushroom', this);
+
+    this.questManager.questList[3].startQuest();
 }
 
 Quest_03.prototype._grandpaDialog = function(quest){
@@ -58,6 +60,7 @@ Quest_03.prototype._mushroomDialog = function(quest){
         stage.dialogManager.startDialog(quest.dialogs[2]);
     } else {
         stage.actionScriptManager.startScript("script01");
+        this.finishQuest();
     }
     quest.trigger[this.properties.id] = true;
     this.destroy();

@@ -22,27 +22,27 @@ Quest_02 = function(questManager){
         "eat you. At least 5 "
     ];
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'quest_02_trigger', this._triggerCreate, this);
+    this.questManager.subscribe(QuestManager.EVENTS.CREATE, 'quest_02_trigger', this._triggerCreate, this);
     this.state = 1;
 }
 
 Quest_02.prototype.startQuest = function(){
     this.aktiv = true;
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this._grandpaDialog, this);
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_milk', this._milkDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this._grandpaDialog, this);
+    this.questManager.subscribe(QuestManager.EVENTS.DIALOG, 'quest_milk', this._milkDialog, this);
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.CREATE, 'quest_milk', this._milkCreate, this);
+    this.questManager.subscribe(QuestManager.EVENTS.CREATE, 'quest_milk', this._milkCreate, this);
 
-    this.questManager.subscribe(this.questManager.EVENT_TYPES.COLLISION, 'quest_02_trigger', this._triggerCollision, this);
+    this.questManager.subscribe(QuestManager.EVENTS.COLLISION, 'quest_02_trigger', this._triggerCollision, this);
 }
 
 Quest_02.prototype.finishQuest = function(){
     this.aktiv = false;
     this.finish = true;
 
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'grandpa', this);
-    this.questManager.unsubscribe(this.questManager.EVENT_TYPES.DIALOG, 'quest_milk', this);;
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'grandpa', this);
+    this.questManager.unsubscribe(QuestManager.EVENTS.DIALOG, 'quest_milk', this);;
 
     this.questManager.questList[2].startQuest();
 }

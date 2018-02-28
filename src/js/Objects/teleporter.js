@@ -2,7 +2,7 @@ Teleporter = function(x, y, properties){
     Phaser.Sprite.call(this, game, x, y, 'tileset', 11);
 
     this.properties = properties;
-    Gingerbread.addPhysics(this);
+    Gingerbread.add(this);
     this.ginger.setSize(8, 8);
     this.ginger.setOrigin(4, 4);
     this.ginger.trigger = true;
