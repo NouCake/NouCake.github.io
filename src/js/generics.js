@@ -53,6 +53,7 @@ Generics.makeThrowable = function(object){
 
     object.onCollision = function(other){
         if(other != stage.player){
+            Gingerbread.basicOnCollison.call(this, other);
             if(this._throwed){
                 if(other.doDamage) other.doDamage(this._damage, this);    
                 this.throwEnd();

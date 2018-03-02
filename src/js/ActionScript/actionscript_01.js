@@ -19,7 +19,7 @@ ActionScript01 = function(){
         function(){
             stage.dialogManager.startDialog("Hey!", false);
         },
-        this._waitForDialog,
+        ActionScript.waitForDialog,
         function(){
             console.log(this);
             this.player.direction = 3;
@@ -46,7 +46,7 @@ ActionScript01 = function(){
                 "*evil laughing*     ",
                 false);
         },
-        this._waitForDialog,
+        ActionScript.waitForDialog,
         function(){
             const distToPathY = Math.round(27 - this.evilman.y/TILE_SIZE);
             this.evilman.walk(distToPathY, 0);

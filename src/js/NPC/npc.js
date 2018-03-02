@@ -1,4 +1,4 @@
-NPC = function(x, y, key, animated){
+NPC = function(x, y, key, animated, properties){
     Phaser.Sprite.call(this, game, x, y, key);
 
     Gingerbread.add(this);
@@ -6,7 +6,7 @@ NPC = function(x, y, key, animated){
     this.x += this.offsetX ;
     this.y += this.offsetY;
 
-    this._direction = 0;
+    this._direction = properties ? properties.direction || 0 : 0;
     this._state = NPC.STATES.IDLE;
     this._frameRate = 8;
     this._speed = 25;

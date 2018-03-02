@@ -1,5 +1,6 @@
 Sword = function(x, y){
     Phaser.Sprite.call(this, game, x, y, 'objects', 3);
+    this.name = 'sword';
 
     this.anchor.set(0.5, 0.5);
 

@@ -41,7 +41,7 @@ ActionScript.prototype.finishScript  = function(){
     stage.resumeGame();
 }
 
-ActionScript.prototype._waitForDialog = function(){
+ActionScript.waitForDialog = function(){
     if(stage.dialogManager.running){
         return true;
     }

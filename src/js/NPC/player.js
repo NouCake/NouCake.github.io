@@ -19,6 +19,7 @@ Player = function(){
     this._knockbackDistance = 7;
     this._carry = false;
     this.health = 6;
+    this.agro = true;
 }
 
 Player.prototype = Object.create(NPC.prototype)
@@ -81,8 +82,9 @@ Player.prototype.boundedUpdate = function(){
 
 Player.prototype.onCollision = function(other){
     this.ginger.speed.set(0);
-    this.x = this.previousPosition.x;
-	this.y = this.previousPosition.y;
+
+    Gingerbread.extendedOnCollision.call(this, other);
+    
 	if(this._bounded && this._bounded != other){
 		this._bounded.onCollision(this);
 	}
@@ -167,26 +169,25 @@ Player.prototype.carryUpadte = function(){
 
 Player.prototype._onDialogPressed = function(){
     player = stage.player
-    if(!player._carry){
-        if(!player.parent.paused && player.dialogHitbox.mark && !stage.dialogManager.running){
-            if(Gingerbread.collides(player.dialogHitbox, player.dialogHitbox.mark)){
+    if(!player.parent.paused && !stage.dialogManager.running){
+        if(player._carry){
+            player.carriedObject.scale.x = 1;
+            player.carriedObject.pivot.y = 0;
+            player.carriedObject.throw(player);
+            player.carriedObject = null;
+            player._carry = false;
+        } else {
+            if(player.dialogHitbox.mark && Gingerbread.collides(player.dialogHitbox, player.dialogHitbox.mark)){
                 player.ginger.speed.set(0);
                 player.dialogHitbox.mark.dialog(player);
             }
         }
-    } else {
-        player.carriedObject.scale.x = 1;
-        player.carriedObject.pivot.y = 0;
-        player.carriedObject.throw(player);
-        player.carriedObject = null;
-        player._carry = false;
     }
 }
 
 Player.prototype._onActionPressed = function(){
-    if(!stage.paused){
-        stage.questManager.notifyEvent(stage.questManager.EVENT_TYPES.DIALOG, stage.player.name, this);
-    }
+    stage.dialogManager.startDialog(dialogs[dia]);
+    dia = dia >= 3 ? 0 : dia+1;
 }
 
 Player.prototype.SET = function(x, y){

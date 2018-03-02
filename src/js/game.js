@@ -5,12 +5,14 @@ let stage = {
         game.load.spritesheet('player', 'src/assets/spritesheets/player.png', 16, 16);
         game.load.spritesheet('grandpa', 'src/assets/spritesheets/grandfather.png', 16, 16);
         game.load.spritesheet('evilman', 'src/assets/spritesheets/ghost.png', 16, 16);
+        game.load.spritesheet('guard', 'src/assets/spritesheets/guard.png', 16, 16);
         game.load.spritesheet('monster', 'src/assets/spritesheets/monsters.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
         game.load.spritesheet('objects', 'src/assets/objects.png', 16, 16);
         game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);
         game.load.tilemap('map_01', 'src/assets/maps/map_01.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map_03', 'src/assets/maps/map_03.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('map_06', 'src/assets/maps/map_06.json', null, Phaser.Tilemap.TILED_JSON);
     },
     create: function(){
         game.time.advancedTiming = true;
@@ -45,15 +47,14 @@ let stage = {
         this.ui.add(this.dialogManager);
         this.ui.add(this.healthbar);
 
-        this.objects.add(this.player);
+        LoadStartGame();
 
-        this.loadNewMap('map_03');
     },
     loadNewMap: function(key, x, y){
         let i = this.objects.length;
         while(i--){
             if(this.objects.getAt(i) != this.player){
-                console.log("DELETE", this.objects.getAt(i));
+                //console.log("DELETE", this.objects.getAt(i));
                 this.objects.getAt(i).destroy();
             }
         }

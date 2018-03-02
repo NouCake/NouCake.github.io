@@ -17,11 +17,14 @@ Gingerbread = {
 		}
 	},
 	collides: function(a, b){
+		if(!a || !b){
+			console.log(a, b);
+		}
 		if( a.ginger.aktiv && b.ginger.aktiv)
-		if( a.ginger.origin.x + a.x + a.ginger.width >= b.ginger.origin.x + b.x &&
-			a.ginger.origin.x + a.x <= b.ginger.origin.x + b.x + b.ginger.width &&
-			a.ginger.origin.y + a.y + a.ginger.height >= b.ginger.origin.y + b.y &&
-			a.ginger.origin.y + a.y <= b.ginger.origin.y + b.y + b.ginger.height ){
+		if( a.ginger.getX() + a.ginger.width >= b.ginger.getX() &&
+			a.ginger.getX() <= b.ginger.getX() + b.ginger.width &&
+			a.ginger.getY() + a.ginger.height >= b.ginger.getY() &&
+			a.ginger.getY() <= b.ginger.getY() + b.ginger.height ){
 			return true;
 		}
 		return false;
@@ -49,6 +52,32 @@ Gingerbread = {
 	}
 }
 
+Gingerbread.basicOnCollison = function(other){
+	this.x = this.previousPosition.x;
+    this.y = this.previousPosition.y;
+}
+
+Gingerbread.extendedOnCollision = function(other){
+	let temp = {x:this.x, y:this.y};
+	caseX = false;
+	caseY = false;
+
+	this.x = this.previousPosition.x;
+	if(Gingerbread.collides(this, other)){
+		caseX = true;
+	}
+	this.position.copyFrom(temp);
+
+	this.y = this.previousPosition.y;
+	if(Gingerbread.collides(this, other)){
+		caseY = true;
+	}
+	this.position.copyFrom(temp);
+
+	if(caseX) this.y = this.previousPosition.y;
+	if(caseY) this.x = this.previousPosition.x;
+}
+
 Gingerbread._updateUnit = function(){
 	if(this.previousPosition) this.previousPosition.set(this.x, this.y);
 	this.x += this.ginger.speed.x * game.time.elapsed/1000;
@@ -70,8 +99,9 @@ Gingerbread._collisionDetection = function(){
 }
 
 Gingerbread._collisionWithObjects = function(){
-	for(a = 0; a < this.attachedBodies.length-1; a++){
-		for(b = a+1; b < this.attachedBodies.length; b++){
+	for(a = 0; a < this.attachedBodies.length; a++){
+		for(b = 0; b < this.attachedBodies.length; b++){
+			if(a != b)
 			if(!(this.attachedBodies[a].ginger.trigger || this.attachedBodies[b].ginger.trigger) && this.collides(this.attachedBodies[a], this.attachedBodies[b])){
 				if(this.attachedBodies[a].onCollision){
 					this.attachedBodies[a].onCollision(this.attachedBodies[b]);
@@ -145,4 +175,12 @@ Gingerbread.Body.prototype.setOrigin = function(x, y, useAnchor){
 
 Gingerbread.Body.prototype.move = function(point){
 	this._move.copyFrom(point);
+}
+
+Gingerbread.Body.prototype.getX = function(){
+	return this.origin.x + this.parent.x;
+}
+
+Gingerbread.Body.prototype.getY = function(){
+	return this.origin.y + this.parent.y;
 }

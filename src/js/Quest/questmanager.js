@@ -1,19 +1,13 @@
 QuestManager = function(){
     this.subscribers = [];
     this.questList = [];
-
-    this.questList.push(new Quest_01(this));
-    this.questList.push(new Quest_02(this));
-    this.questList.push(new Quest_03(this));
-    this.questList.push(new Quest_04(this));
-
-    this.questList[3].startQuest();
 }
 
 QuestManager.prototype.update = function(){
     for(i in this.questList){
         if(this.questList[i].aktiv){
-            this.questList[i].update();
+            if(this.questList[i].update)
+                this.questList[i].update();
         }
     }
 }

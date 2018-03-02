@@ -8,6 +8,8 @@ Teleporter = function(x, y, properties){
     this.ginger.trigger = true;
 
     this.renderable = false;
+
+    this.collided = false;
 }
 
 Teleporter.prototype = Object.create(Phaser.Sprite.prototype);
@@ -15,8 +17,14 @@ Teleporter.prototype.constructor = Teleporter;
 
 Teleporter.prototype.onCollision = function(other){
     if(other == stage.player){
-        stage.loadNewMap(this.properties["destMap"],
-            this.properties["destX"]*TILE_SIZE,
-            this.properties["destY"]*TILE_SIZE);
+        this.collided = true;
+    }
+}
+
+Teleporter.prototype.update = function(){
+    if(this.collided){
+            stage.loadNewMap(this.properties["destMap"],
+                this.properties["destX"]*TILE_SIZE,
+                this.properties["destY"]*TILE_SIZE);
     }
 }

@@ -1,9 +1,15 @@
 QuestObject = function(x, y, properties){
     Phaser.Sprite.call(this, game, x, y, properties.key, properties.frame);
-    this.name = properties.name;
     this.properties = properties;
 
+    for(val in properties){
+        this[val] = properties[val];
+    }
+
     Gingerbread.add(this);
+    if(properties.trigger){
+        this.ginger.trigger = true;
+    }
     stage.questManager.notifyEvent(QuestManager.EVENTS.CREATE, this.name, this);
 }
 

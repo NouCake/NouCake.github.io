@@ -1,5 +1,5 @@
-Grandpa = function(x, y){
-    NPC.call(this, x, y, 'grandpa', true);
+Grandpa = function(x, y, properties){
+    NPC.call(this, x, y, 'grandpa', true, properties);
 
     this.ginger.setSize(9, 14);
     this.ginger.setOrigin(3, 1, this.anchor);

@@ -66,7 +66,7 @@
                  "properties":
                     {
                      "class":"Grandpa",
-                     "direction":1
+                     "direction":0
                     },
                  "propertytypes":
                     {
@@ -156,14 +156,18 @@
                      "class":"QuestObject",
                      "frame":91,
                      "key":"tileset",
-                     "name":"quest_02_trigger"
+                     "name":"home_trigger",
+                     "renderable":false,
+                     "trigger":true
                     },
                  "propertytypes":
                     {
                      "class":"string",
                      "frame":"int",
                      "key":"string",
-                     "name":"string"
+                     "name":"string",
+                     "renderable":"bool",
+                     "trigger":"bool"
                     },
                  "rotation":0,
                  "type":"",
@@ -179,11 +183,13 @@
                  "name":"",
                  "properties":
                     {
-                     "class":"Sword"
+                     "class":"Sword",
+                     "name":"sword"
                     },
                  "propertytypes":
                     {
-                     "class":"string"
+                     "class":"string",
+                     "name":"string"
                     },
                  "rotation":0,
                  "type":"",

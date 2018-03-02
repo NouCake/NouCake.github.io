@@ -1,8 +1,5 @@
 ActionScriptManager = function(){
     this.scriptList = [];
-    
-    this.scriptList.push(new ActionScript01());
-    this.scriptList.push(new ActionScript02());
 }
 
 ActionScriptManager.prototype = Object.create(Object.prototype);
