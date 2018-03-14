@@ -10,6 +10,7 @@ LoadStartGame = function(){
     stage.questManager.questList.push(new Quest_03(stage.questManager));
     stage.questManager.questList.push(new Quest_04(stage.questManager));
 
+    stage.questManager.questList[0].startQuest();
     stage.questManager.questList[1].startQuest();
 
     stage.objects.add(stage.player);
