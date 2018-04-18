@@ -4,13 +4,17 @@ Monster = function(x, y, key, frame){
     Gingerbread.add(this);
     this.ginger.collidesWithMap = true;
     
+    this.hitShader = new Phaser.Filter(game, null, game.cache.getShader('hitShader'));
+    this.filters = [this.hitShader];
+
     this.agro = false;
     this.player = stage.player;
     this._speed = 25;
     this._followPlayer = true;
     this._followDistance = 75;
     this._damage = 1;
-    this.health = 2;
+    this._timer = 0;
+    this.health = 3;
 }
 
 Monster.prototype = Object.create(Phaser.Sprite.prototype);
@@ -20,6 +24,14 @@ Monster.prototype.update = function(){
     if(this._followPlayer) this.followPlayer();
     if(this.health == 0){
         this.destroy();
+    }
+    this.hitShader.uniforms.time.value += game.time.elapsedMS;
+    if(this.invincible){
+        this._timer += game.time.elapsedMS;
+        if(this._timer > 500){
+            this._timer = 0;
+            this.invincible = false;
+        }
     }
 }
 

@@ -4,9 +4,7 @@ Evilman = function(x, y){
     this.ginger.setSize(8, 14);
     this.ginger.setOrigin(4, 1);
     this.name = 'evilman';
-
-    this.walk(1, 1);
 }
 
 Evilman.prototype = Object.create(NPC.prototype);
-Evilman.prototype.constructor = Grandpa;
+Evilman.prototype.constructor = Evilman;

@@ -3,12 +3,17 @@ Generics = {};
 Generics.knockbackDistance = 10;
 
 Generics.doDamage = function(damage, source){
-    this.health -= damage;
-    Generics.knockback.call(this, source, Generics.knockbackDistance);
+    if(!this.invincible){
+        this.invincible = true;
+        if(this.hitShader){
+            this.hitShader.uniforms.time.value = 0;
+        }
+        this.health -= damage;
+        Generics.knockback.call(this, source, Generics.knockbackDistance);    
+    }
 }
 
 Generics.knockback = function(source, distance){
-    console.log(this);
     let pos = new Phaser.Point(this.x - source.x, this.y - source.y);
     pos.setMagnitude(distance);
     this.ginger.move(pos);
@@ -43,7 +48,6 @@ Generics.makeThrowable = function(object){
     }
 
     object.throwEnd = function(){
-
         this.ginger.speed.set(0);
         this.ginger.collidesWithMap = false;
         this.ginger.trigger = false;
@@ -55,7 +59,9 @@ Generics.makeThrowable = function(object){
         if(other != stage.player){
             Gingerbread.basicOnCollison.call(this, other);
             if(this._throwed){
-                if(other.doDamage) other.doDamage(this._damage, this);    
+                if(other.doDamage) {
+                    other.doDamage(this._damage, this);
+                }
                 this.throwEnd();
             }
         }

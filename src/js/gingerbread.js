@@ -3,6 +3,7 @@ Gingerbread = {
 	running: false,
 	paused: false,
 	attachedBodies: [],
+	pendingDestroy: [],
 	init: function(world){
 		this.running = true;
 		this.world = world;
@@ -30,24 +31,36 @@ Gingerbread = {
 		return false;
 	},
 	remove: function(object){
-		let i = this.attachedBodies.length;
-		while(i--){
-			if(object == this.attachedBodies[i]){
-				delete this.attachedBodies[i];
-				this.attachedBodies = this.attachedBodies.filter(obj => obj!=undefined);
-				console.log("ginger removed");
-			}
-		}
+		this.pendingDestroy.push(object);
 	},
 	clearList: function(filterFunction){
 		this.attachedBodies = this.attachedBodies.filter(filterFunction);
 	},
 	update: function(){
+		this.removeUpdate();
+
 		if(!this.paused && this.running){
 			for(obj in this.attachedBodies){
 				Gingerbread._updateUnit.call(this.attachedBodies[obj]);
 			}
 			Gingerbread._collisionDetection();
+		}
+	},
+	removeUpdate: function(){
+		for(x in this.pendingDestroy){
+			destroyed = false;
+			for(i in this.attachedBodies){
+				if(this.attachedBodies[i] == this.pendingDestroy[x]){
+					delete this.attachedBodies[i];
+					delete this.pendingDestroy[x];
+					destroyed = true;
+				}
+			}
+			if(!destroyed){
+				console.log("error while destroying");
+			} else {
+				console.log("ginger removed");
+			}
 		}
 	}
 }
@@ -99,8 +112,8 @@ Gingerbread._collisionDetection = function(){
 }
 
 Gingerbread._collisionWithObjects = function(){
-	for(a = 0; a < this.attachedBodies.length; a++){
-		for(b = 0; b < this.attachedBodies.length; b++){
+	for(a in this.attachedBodies){
+		for(b in this.attachedBodies){
 			if(a != b)
 			if(!(this.attachedBodies[a].ginger.trigger || this.attachedBodies[b].ginger.trigger) && this.collides(this.attachedBodies[a], this.attachedBodies[b])){
 				if(this.attachedBodies[a].onCollision){
@@ -126,9 +139,9 @@ Gingerbread._collisionWithMap = function(){
 }
 
 Gingerbread._collisionWithTrigger = function(){
-	for(a = 0; a < this.attachedBodies.length; a++){
+	for(a in this.attachedBodies){
 		if(this.attachedBodies[a].ginger.trigger)
-			for(b = 0; b < this.attachedBodies.length; b++){
+			for(b in this.attachedBodies){
 				if(a != b && !this.attachedBodies[b].ginger.trigger){
 					if(this.collides(this.attachedBodies[a], this.attachedBodies[b])){
 						//console.log(this.list[b].key);

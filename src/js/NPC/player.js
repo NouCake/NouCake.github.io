@@ -11,6 +11,10 @@ Player = function(){
 
     this.name = "player";
 
+    this.hitShader = new Phaser.Filter(game, null, game.cache.getShader('hitShader'));
+    this.hitShader.padding = 8;
+    this.filters = [this.hitShader];
+
     this.anchor.set(0.5, 0.5);
     this._directionFreezed = false;
     this._speed = 75;
@@ -18,21 +22,45 @@ Player = function(){
     this._bindedSpeed = 15;
     this._knockbackDistance = 7;
     this._carry = false;
+    this._timer = 0;
+    this.updateModules = [];
     this.health = 6;
     this.agro = true;
+    this.invincible = false;
+
+    this.updateModules.push(this.inputUpdate);
+    this.updateModules.push(this.animationUpdate);
+    this.updateModules.push(this.boundedUpdate);
+    this.updateModules.push(this.carryUpadte);
+    this.updateModules.push(this.shaderUpdate);
+    this.updateModules.push(this.invincibleUpdate);
 }
 
 Player.prototype = Object.create(NPC.prototype)
 Player.prototype.constructor = Player;
 
 Player.prototype.update = function(){
-    this.inputUpdate();
-    this.animationUpdate();
-    this.boundedUpdate();
-    this.carryUpadte();
+
+    for(i in this.updateModules){
+        this.updateModules[i].call(this);
+    }
+
     this.dialogHitbox.update();
-    
     game.camera.follow(this);
+}
+
+Player.prototype.shaderUpdate = function(){
+    this.hitShader.uniforms.time.value += game.time.elapsedMS;
+}
+
+Player.prototype.invincibleUpdate = function(){
+    if(this.invincible){
+        this._timer += game.time.elapsedMS;
+        if(this._timer > 500){
+            this.invincible = false;
+            this._timer = 0;
+        }
+    }
 }
 
 Player.prototype.inputUpdate = function(){
@@ -84,7 +112,6 @@ Player.prototype.onCollision = function(other){
     this.ginger.speed.set(0);
 
     Gingerbread.extendedOnCollision.call(this, other);
-    
 	if(this._bounded && this._bounded != other){
 		this._bounded.onCollision(this);
 	}
@@ -186,8 +213,9 @@ Player.prototype._onDialogPressed = function(){
 }
 
 Player.prototype._onActionPressed = function(){
-    stage.dialogManager.startDialog(dialogs[dia]);
-    dia = dia >= 3 ? 0 : dia+1;
+    //stage.dialogManager.startDialog(dialogs[dia]);
+    //dia = dia >= 3 ? 0 : dia+1;
+    stage.player.hitShader.uniforms.time.value = 0;
 }
 
 Player.prototype.SET = function(x, y){

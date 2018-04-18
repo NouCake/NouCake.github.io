@@ -2,17 +2,23 @@ let stage = {
     preload: function(){
         game.load.bitmapFont('font', 'src/assets/font/font.png', 'src/assets/font/font.fnt');
         game.load.image('dialog', 'src/assets/dialog.png');
+        game.load.image('boss', 'src/assets/boss.png');
         game.load.spritesheet('player', 'src/assets/spritesheets/player.png', 16, 16);
         game.load.spritesheet('grandpa', 'src/assets/spritesheets/grandfather.png', 16, 16);
         game.load.spritesheet('evilman', 'src/assets/spritesheets/ghost.png', 16, 16);
         game.load.spritesheet('guard', 'src/assets/spritesheets/guard.png', 16, 16);
         game.load.spritesheet('monster', 'src/assets/spritesheets/monsters.png', 16, 16);
+        game.load.spritesheet('flame', 'src/assets/spritesheets/flame.png', 16, 16);
         game.load.spritesheet('tileset', 'src/assets/tileset.png', 16, 16);
         game.load.spritesheet('objects', 'src/assets/objects.png', 16, 16);
         game.load.spritesheet('dpad', 'src/assets/dpad.png', 32, 32);
         game.load.tilemap('map_01', 'src/assets/maps/map_01.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map_03', 'src/assets/maps/map_03.json', null, Phaser.Tilemap.TILED_JSON);
         game.load.tilemap('map_06', 'src/assets/maps/map_06.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.tilemap('map_07', 'src/assets/maps/map_07.json', null, Phaser.Tilemap.TILED_JSON);
+        game.load.shader('colorFilter', 'src/assets/shader/colorFilter.frag');
+        game.load.shader('hitShader', 'src/assets/shader/test2.frag');
+        game.load.shader('basicShader', 'src/assets/shader/basicShader.frag');
     },
     create: function(){
         game.time.advancedTiming = true;
@@ -42,6 +48,12 @@ let stage = {
         this.dialogManager = new DialogManager();
         this.questManager = new QuestManager();
         this.actionScriptManager = new ActionScriptManager();
+
+        let filter = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
+        filter.uniforms.hue = {type: "1f", value: 283.0};
+        filter.uniforms.sat = {type: "1f", value: 1};
+        filter.uniforms.val = {type: "1f", value: 1};
+        Flame.filter = filter;
 
 
         this.ui.add(this.dialogManager);
@@ -118,4 +130,4 @@ let DIRECTION_AS_POINT = [new Phaser.Point(0, 1),
     new Phaser.Point(-1, 0),
     new Phaser.Point(0, -1),
     new Phaser.Point(1, 0)];
-let game = new Phaser.Game(160, 128, Phaser.CANVAS, "", stage, false, false);
+let game = new Phaser.Game(160, 128, Phaser.AUTO, "", stage, false, false);

@@ -10,11 +10,23 @@ LoadStartGame = function(){
     stage.questManager.questList.push(new Quest_03(stage.questManager));
     stage.questManager.questList.push(new Quest_04(stage.questManager));
 
-    stage.questManager.questList[0].startQuest();
+    //stage.questManager.questList[0].startQuest();
     stage.questManager.questList[1].startQuest();
 
     stage.objects.add(stage.player);
-    stage.loadNewMap('map_03');
+    stage.loadNewMap('map_07');
+
+    
+
+
+    stage.filter = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
+    stage.filter.uniforms.hue = {type: "1f", value: 283.0};
+    stage.filter.uniforms.sat = {type: "1f", value: 1};
+    stage.filter.uniforms.val = {type: "1f", value: 1};
+
+    //let flame = stage.objects.add(new Flame(stage.player.x, stage.player.y));
+    //flame.filters = [stage.filter];
+
 }
 
 
