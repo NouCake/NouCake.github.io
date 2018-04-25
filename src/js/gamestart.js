@@ -20,7 +20,7 @@ LoadStartGame = function(){
 
 
     stage.filter = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
-    stage.filter.uniforms.hue = {type: "1f", value: 283.0};
+    stage.filter.uniforms.hue = {type: "1f", value: 0.0};
     stage.filter.uniforms.sat = {type: "1f", value: 1};
     stage.filter.uniforms.val = {type: "1f", value: 1};
 
