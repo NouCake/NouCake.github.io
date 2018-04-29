@@ -83,6 +83,8 @@ Boss.prototype.onCollision = function(other){
 Boss._phase1Init = function(){
     this.adds = [];
     this.spawnFlames(10);
+    this.flames[0].shoot();
+
 }
 
 Boss._phase1Update = function(){

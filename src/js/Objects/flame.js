@@ -1,4 +1,4 @@
-Flame = function(x, y, presets){
+Flame = function(x, y, mode){
     Phaser.Sprite.call(this, game, x, y, 'flame')
 
     this.anchor.set(0.5);
@@ -10,8 +10,14 @@ Flame = function(x, y, presets){
     this.name = 'flame';
     this._timer = -1;
     this.circularData = {};
-    this.filters = [Flame.filter];
-    console.log("created");
+    this.shooting = false;
+    //this.mode = mode ? mode : 0;
+    this.speed = 25;
+
+    this.shader = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
+    this.shader.uniforms.hue = {type: "1f", value: 0.0};
+    this.shader.uniforms.sat = {type: "1f", value: 1.0};
+    this.shader.uniforms.val = {type: "1f", value: 1.0};
 }
 
 Flame.prototype = Object.create(Phaser.Sprite.prototype)
@@ -19,6 +25,59 @@ Flame.prototype.constructor = Flame;
 
 Flame.prototype.update = function(){
     this.circularUpdate();
+}
+
+Flame.prototype.shootUpdate = function(){
+    if(this.mode == 2){
+        let p = Phaser.Point(this.x - stage.player.x, this.y - stage.player.y);
+        p.setMagnitude(this.speed * 0.5);
+        this.ginger.x += p.x;
+        this.ginger.y += p.y;
+    }
+}
+
+Flame.prototype.onCollision = function(other){
+    this["onCollisionMode"+this.mode](other);
+}
+
+Flame.prototype.onCollisionMode0 = function(other){
+    if(stage.player == other){
+        other.doDamage(1, this);
+    }
+}
+
+Flame.prototype.onCollisionMode1 = function(other){
+    this.onCollisionMode0(other);
+    if(other.name == 'sword'){
+        other.onCollision(this);
+    }
+}
+
+Flame.prototype.onCollisionMode2 = function(other){
+    this.onCollisionMode1(other);
+}
+
+Flame.prototype.shoot = function(){
+    projectile = new Flame(this.x, this.y, this.mode);
+    
+    projectile.shooting = true;
+    projectile.ginger.speed.x = this.x - stage.player.x;
+    projectile.ginger.speed.y = this.y - stage.player.y;
+    projectile.ginger.speed.setMagnitude(this.speed);
+}
+
+Flame.prototype.setMode = function(mode){
+    switch(mode){
+        case 0:
+            this.shader.uniforms.hue.value = 0;
+            break;
+        case 1:
+            this.shader.uniforms.hue.value = 240;
+            break;
+        case 2:
+            this.shader.uniforms.hue.value = 283;
+            break;
+    }
 }
 
 Flame.prototype.circularUpdate = function(){

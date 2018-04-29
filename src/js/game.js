@@ -49,13 +49,6 @@ let stage = {
         this.questManager = new QuestManager();
         this.actionScriptManager = new ActionScriptManager();
 
-        let filter = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
-        filter.uniforms.hue = {type: "1f", value: 240.0};
-        filter.uniforms.sat = {type: "1f", value: 1.0};
-        filter.uniforms.val = {type: "1f", value: 1.0};
-        Flame.filter = filter;
-
-
         this.ui.add(this.dialogManager);
         this.ui.add(this.healthbar);
 
