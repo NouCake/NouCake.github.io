@@ -107,17 +107,11 @@
                  "name":"",
                  "properties":
                     {
-                     "class":"QuestObject",
-                     "frame":11,
-                     "key":"tileset",
-                     "name":"firepit"
+                     "class":"Firepit"
                     },
                  "propertytypes":
                     {
-                     "class":"string",
-                     "frame":"int",
-                     "key":"string",
-                     "name":"string"
+                     "class":"string"
                     },
                  "rotation":0,
                  "type":"",
@@ -161,7 +155,7 @@
  "nextobjectid":43,
  "orientation":"orthogonal",
  "renderorder":"right-down",
- "tiledversion":"1.1.0",
+ "tiledversion":"1.1.4",
  "tileheight":16,
  "tilesets":[
         {

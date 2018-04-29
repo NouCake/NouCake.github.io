@@ -31,23 +31,28 @@ Gingerbread = {
 		return false;
 	},
 	remove: function(object){
-		this.pendingDestroy.push(object);
+		//checks if object already is in pending destroy
+		if(this.pendingDestroy.filter(other => other == object).length == 0){
+			this.pendingDestroy.push(object);
+		} else {
+			console.log("there is already a pendign destroy");
+		}
 	},
 	clearList: function(filterFunction){
 		this.attachedBodies = this.attachedBodies.filter(filterFunction);
 	},
 	update: function(){
-		this.removeUpdate();
-
 		if(!this.paused && this.running){
 			for(obj in this.attachedBodies){
 				Gingerbread._updateUnit.call(this.attachedBodies[obj]);
 			}
 			Gingerbread._collisionDetection();
+			this.removeUpdate();
 		}
 	},
 	removeUpdate: function(){
 		for(x in this.pendingDestroy){
+			
 			destroyed = false;
 			for(i in this.attachedBodies){
 				if(this.attachedBodies[i] == this.pendingDestroy[x]){

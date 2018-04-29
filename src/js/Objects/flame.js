@@ -8,7 +8,6 @@ Flame = function(x, y, presets){
     Gingerbread.add(this);
     this.ginger.setOrigin(0, 0, this.anchor);
     this.name = 'flame';
-    //Generics.makeThrowable(this);
     this._timer = -1;
     this.circularData = {};
     this.filters = [Flame.filter];
@@ -19,7 +18,6 @@ Flame.prototype = Object.create(Phaser.Sprite.prototype)
 Flame.prototype.constructor = Flame;
 
 Flame.prototype.update = function(){
-    //this.throwUpdate();
     this.circularUpdate();
 }
 
@@ -40,10 +38,4 @@ Flame.prototype.circular = function(parent, distance, speed, index, total){
     this.circularData.index = index;
     this.circularData.total = total;
     this.circularData.activ = true;
-}
-
-Flame.prototype.onCollision = function(other){
-    if(other.name == 'firepit'){
-        this.destroy();
-    }
 }

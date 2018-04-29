@@ -18,6 +18,7 @@ QuestManager.prototype.subscribe = function(event, key, callback, quest){
 }
 
 QuestManager.prototype.unsubscribe = function(event, key, quest){
+    console.log('unsubscribed', key);   
     let i = this.subscribers.length;
     while(i--){
         if(this.subscribers[i].quest == quest &&
@@ -44,5 +45,6 @@ QuestManager.prototype.notifyEvent = function(event, key, object, other){
 QuestManager.EVENTS = {
     CREATE: 'create',
     DIALOG: 'dialog',
-    COLLISION: 'collision' 
+    COLLISION: 'collision' ,
+    OTHER: 'other'
 }
