@@ -29,6 +29,10 @@ Boss.prototype.update = function(){
         this.invincible = false;
     }
 
+    if(this.health <= 0){
+
+    }
+
     this.currentPhaseUpdate.call(this);
 } 
 Boss.prototype.floatingUpdate = function(){
@@ -80,10 +84,19 @@ Boss.prototype.onCollision = function(other){
     }
 }
 
+Boss.prototype.doDamage = function(amount, other){
+    if(other.name == sword){
+
+    }
+}
+
+Boss.
+
 Boss._phase1Init = function(){
     this.adds = [];
     this.spawnFlames(10);
     this.flames[0].shoot();
+    this.health = 3;
 
 }
 

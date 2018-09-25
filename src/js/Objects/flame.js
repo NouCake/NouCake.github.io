@@ -7,12 +7,14 @@ Flame = function(x, y, mode){
 
     Gingerbread.add(this);
     this.ginger.setOrigin(0, 0, this.anchor);
+    this.ginger.trigger = true;
+
     this.name = 'flame';
     this._timer = -1;
     this.circularData = {};
     this.shooting = false;
-    //this.mode = mode ? mode : 0;
-    this.speed = 25;
+    this.mode = mode ? mode : 0;
+    this.speed = 50;
 
     this.shader = new Phaser.Filter(game, null, game.cache.getShader('colorFilter'));
     this.shader.uniforms.hue = {type: "1f", value: 0.0};
@@ -29,7 +31,7 @@ Flame.prototype.update = function(){
 
 Flame.prototype.shootUpdate = function(){
     if(this.mode == 2){
-        let p = Phaser.Point(this.x - stage.player.x, this.y - stage.player.y);
+        let p = Phaser.Point(tage.player.x - this.x, stage.player.y - this.y);
         p.setMagnitude(this.speed * 0.5);
         this.ginger.x += p.x;
         this.ginger.y += p.y;
@@ -43,6 +45,7 @@ Flame.prototype.onCollision = function(other){
 Flame.prototype.onCollisionMode0 = function(other){
     if(stage.player == other){
         other.doDamage(1, this);
+        this.destroy();
     }
 }
 
@@ -50,6 +53,9 @@ Flame.prototype.onCollisionMode1 = function(other){
     this.onCollisionMode0(other);
     if(other.name == 'sword'){
         other.onCollision(this);
+        if(other.throwing){
+            this.destroy();
+        }
     }
 }
 
@@ -58,11 +64,11 @@ Flame.prototype.onCollisionMode2 = function(other){
 }
 
 Flame.prototype.shoot = function(){
-    projectile = new Flame(this.x, this.y, this.mode);
+    projectile = stage.objects.add(new Flame(this.x, this.y, this.mode));
     
     projectile.shooting = true;
-    projectile.ginger.speed.x = this.x - stage.player.x;
-    projectile.ginger.speed.y = this.y - stage.player.y;
+    projectile.ginger.speed.x = stage.player.x - this.x;
+    projectile.ginger.speed.y = stage.player.y - this.y;
     projectile.ginger.speed.setMagnitude(this.speed);
 }
 
