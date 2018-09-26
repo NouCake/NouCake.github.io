@@ -50,6 +50,15 @@ myApp = {
         document.body.appendChild(btn);
 
         btn = document.createElement("button");
+        btn.innerHTML = "forbidden fruit";
+        btn.onclick = function(){
+            Imgur.post("gallery/t/bowsette/", function(data){
+                myApp.loadData(data.items);
+            });
+        }
+        document.body.appendChild(btn);
+
+        btn = document.createElement("button");
         btn.innerHTML = "next";
         btn.onclick = function(){
             myApp.showNext();
