@@ -13,28 +13,15 @@ Imgur = {
             }
         }
         xhttp.send();
-    },
-    postOther: function(req){
-        let prom = {data:"not avaible"};
-        let xhttp = new XMLHttpRequest();
-        xhttp.open('GET', this.endpoint + req, true);
-        xhttp.setRequestHeader('Authorization', 'Client-ID ' + this.clientId)
-        xhttp.onreadystatechange = function(){
-            if (this.readyState == 4) {
-                obj = JSON.parse(this.responseText);
-                console.log(obj);
-                prom.data = obj;
-            }
-        }
-        xhttp.send();
-        return prom
     }
 }
 
 page = {
-    divContent: null,
+    divImageContainer: null,
     divPostHeader: null,
+    divSauce: null,
     lbTitle: null,
+    lbSauce: null,
     btnPrev: null,
     btnViral: null,
     btnForbidden: null,
@@ -45,10 +32,12 @@ page = {
         this.createNewPanel();
     },
     loadElements: function(){
-        this.divContent = document.getElementById("content");
+        this.divImageContainer = document.getElementById("imageContainer");
         this.divPostHeader = document.getElementById("postHeader");
+        this.divSauce = document.getElementById("sauceContainer");
 
         this.lbTitle = document.getElementById("postHeaderTitle");
+        this.lbSauce = document.getElementById("sauce");
 
         this.btnPrev = document.getElementById("btn_prev");
         this.btnViral = document.getElementById("btn_viral");
@@ -83,12 +72,15 @@ page = {
         panel.div.appendChild(panel.video);
         panel.div.appendChild(panel.description);
 
-        this.divContent.appendChild(panel.div);
+        this.divImageContainer.appendChild(panel.div);
         this.panels.push(panel);
     },
     setTitle: function(title){
         this.showElement(this.divPostHeader);
         this.lbTitle.innerHTML = title;
+    },
+    setSauce: function(link){
+        this.lbSauce.href = link;
     },
     hideElement: function(element){
         element.style.display = "none";
@@ -114,18 +106,20 @@ page = {
         this.panels[index].image.src = source;
         this.showElement(this.panels[index].div);
         this.showElement(this.panels[index].image);
+        this.showElement(this.divSauce);
         this.showDescription(index, description);
     },
     displayVideo: function(index, source, description){
         this.panels[index].video.src = source;
         this.showElement(this.panels[index].div);
         this.showElement(this.panels[index].video);
+        this.showElement(this.divSauce);
         this.showDescription(index, description);
     },
     showDescription: function(index, description){
         if(description){
             this.showElement(this.panels[index].description);
-            this.panels[index].description.innerHTML = description;
+            this.panels[index].description.innerHTML = description.replace(/\n/g, '<br />');
         } else {
             this.hideElement(this.panels[index].description);
             this.panels[index].description.innerHTML = "";
@@ -136,31 +130,30 @@ page = {
 myApp = {
     data: null,
     current: 0,
+    currentPage: 0,
+    lastReq: this.loadMostViral,
     init: function(){
         this.page = page;
         this.page.init();
         this.createButtonFunction();
     },
     createButtonFunction: function(){
-        this.page.btnPrev.onclick = function(){
-            myApp.showLast();
-        }
-
-        this.page.btnViral.onclick = function(){
-            Imgur.post("gallery/hot/time/day/0?showViral=true&mature=true", function(data){
-                myApp.loadData(data);
-            });
-        }
-        
-        this.page.btnForbidden.onclick = function(){
-            Imgur.post("gallery/t/bowsette/rising/", function(data){
-                myApp.loadData(data.items);
-            });
-        }
-
-        this.page.btnNext.onclick = function(){
-            myApp.showNext();
-        }
+        this.page.btnPrev.onclick = this.showLast.bind(this);
+        this.page.btnViral.onclick = this.loadMostViral.bind(this);
+        this.page.btnForbidden.onclick = this.loadForbidden.bind(this);
+        this.page.btnNext.onclick = this.showNext.bind(this);
+    },
+    loadMostViral: function(){
+        Imgur.post("gallery/hot/time/day/"+this.currentPage+"?mature=true", function(data){
+            myApp.loadData(data);
+            myApp.lastReq = myApp.loadMostViral;
+        });
+    },
+    loadForbidden: function(){
+        Imgur.post("gallery/t/bowsette/rising/day/"+this.currentPage+"?mature=true", function(data){
+            myApp.loadData(data.items);
+            myApp.lastReq = myApp.loadForbidden;
+        });
     },
     loadData: function(data){
         this.data = data;
@@ -172,7 +165,8 @@ myApp = {
             nextData = this.data[++this.current];
             this.showData(nextData);
         } else {
-            console.log("reached max");
+            this.currentPage++;
+            this.lastReq();
         }
 
     },
@@ -181,13 +175,17 @@ myApp = {
             nextData = this.data[--this.current];
             this.showData(nextData);
         } else {
-            console.log("reached first");
+            if(this.currentPage > 0){
+                this.currentPage--;
+                this.lastReq();
+            }
         }
 
     },
     showData: function(data){
         this.page.setTitle(data.title);
         this.page.hideAllPanels();
+        this.page.setSauce(data.link);
         if(data.is_album){
             this.showGallery(data);
         } else {
@@ -209,7 +207,20 @@ myApp = {
         this.page.showDescription(index, data.description);
     },
     showGallery: function(gallery){
-        if(gallery.images.length > this.page.panels.length){
+        //checks if not all images are loaded
+        //should be necessary if gallery has more than 3 images
+        if(gallery.images.length != gallery.images_count){
+            if(!gallery.reloaded) { //prevents infinity loop on error (hopefully) 
+                    Imgur.post('gallery/' + gallery.id, function(data){
+                    myApp.showData(data);
+                    gallery.images = data.images;
+                    gallery.reloaded = true;
+                });
+            }
+        }
+
+        //creates panels if necessary
+        if(gallery.images_count > this.page.panels.length){
             for(i = this.page.panels.length; i <= gallery.images.length; i++){
                 this.page.createNewPanel();
             }
