@@ -38,6 +38,29 @@
         display: none;
       }
 
+      #sauce{
+        color:rgb(32, 32, 32);
+      }
+
+      #sauceContainer{
+        text-align: left;
+        margin-top: 15px;
+        margin-bottom: -30px;
+        display: none;
+      }
+
+      #commentContainer{
+        width: 640px;
+        display: none;
+        background-color:rgb(70, 70, 70);
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      #topComment{
+        text-align: left;
+      }
+
       .postDescription{
         margin: 0px;
         text-align: left;
@@ -62,15 +85,8 @@
         margin-top: 10px;
       }
 
-      #sauce{
-        color:rgb(32, 32, 32);
-      }
-
-      #sauceContainer{
-        text-align: left;
-        margin-top: 15px;
-        margin-bottom: -30px;
-        display: none;
+      .nomarg{
+        margin: 0px;
       }
 
       h1{
@@ -94,6 +110,7 @@
             <h2 id="postHeaderTitle">NO POST LOADED</h2>
           </div>
           <div id="imageContainer"></div>
+          <div id="commentContainer"><p class="nomwarg"><b>Top Comment</b></p><p id="topComment"></p></div>
           <div id="sauceContainer"><a id="sauce" target="_blank" href="http://imgur.com/t/">sauce</a></p>
       </div>
 

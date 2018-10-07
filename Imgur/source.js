@@ -20,7 +20,9 @@ page = {
     divImageContainer: null,
     divPostHeader: null,
     divSauce: null,
+    divComments: null,
     lbTitle: null,
+    lbComment: null,
     lbSauce: null,
     btnPrev: null,
     btnViral: null,
@@ -35,8 +37,10 @@ page = {
         this.divImageContainer = document.getElementById("imageContainer");
         this.divPostHeader = document.getElementById("postHeader");
         this.divSauce = document.getElementById("sauceContainer");
+        this.divComments = document.getElementById("commentContainer");
 
         this.lbTitle = document.getElementById("postHeaderTitle");
+        this.lbComment = document.getElementById("topComment");
         this.lbSauce = document.getElementById("sauce");
 
         this.btnPrev = document.getElementById("btn_prev");
@@ -54,7 +58,7 @@ page = {
         panel.image.src = "default.png";
         panel.image.width = 640;
         panel.image.style.display = "none";
-        panel.image.className = "image"
+        panel.image.addEventListener("click", myApp.showNext.bind(myApp));
         
         panel.video = document.createElement("video");
         panel.video.src = "";
@@ -82,6 +86,9 @@ page = {
     setSauce: function(link){
         this.lbSauce.href = link;
     },
+    setComment: function(comment){
+        this.lbComment.innerHTML = comment;
+    },
     hideElement: function(element){
         element.style.display = "none";
         if(element.pause) element.pause();
@@ -107,6 +114,7 @@ page = {
         this.showElement(this.panels[index].div);
         this.showElement(this.panels[index].image);
         this.showElement(this.divSauce);
+        this.showElement(this.divComments);
         this.showDescription(index, description);
     },
     displayVideo: function(index, source, description){
@@ -114,6 +122,7 @@ page = {
         this.showElement(this.panels[index].div);
         this.showElement(this.panels[index].video);
         this.showElement(this.divSauce);
+        this.showElement(this.divComments);
         this.showDescription(index, description);
     },
     showDescription: function(index, description){
@@ -186,6 +195,9 @@ myApp = {
         this.page.setTitle(data.title);
         this.page.hideAllPanels();
         this.page.setSauce(data.link);
+        Imgur.post("gallery/"+data.id+"/comments/best", function(data){
+            page.setComment(data[0].comment);
+        })
         if(data.is_album){
             this.showGallery(data);
         } else {
