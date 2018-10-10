@@ -14,7 +14,7 @@ LoadStartGame = function(){
     stage.questManager.questList[1].startQuest();
 
     stage.objects.add(stage.player);
-    stage.loadNewMap('map_07');
+    stage.loadNewMap('map_03');
 
     
 

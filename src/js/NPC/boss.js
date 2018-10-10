@@ -90,8 +90,6 @@ Boss.prototype.doDamage = function(amount, other){
     }
 }
 
-Boss.
-
 Boss._phase1Init = function(){
     this.adds = [];
     this.spawnFlames(10);

@@ -6,7 +6,7 @@ QuestDialogs.Quest_01 = [
     "cold. Make yourself "+
     "useful and cut wood "+
     "or whatever.        "+
-    "Where's my damn beer",
+    "Where's my damn milk",
 
     "The wood is outside."+
     "Go and cut it!      "+
@@ -20,17 +20,17 @@ QuestDialogs.Quest_01 = [
 
 QuestDialogs.Quest_02 = [
     "And now bring me    "+
-    "my fkn beer from    "+
+    "my damn milk from   "+
     "outside",
 
     "I am still waiting  "+
-    "for my god damn beer",
+    "for my god damn milk",
 
-    "I think i will piss "+
+    "I think i will spit "+
     "into this milk",
 
     "Seesh!              "+
-    "That's the bets beer"+
+    "That's the best milk"+
     "i ever had in my    "+
     "entire life",
 ];
