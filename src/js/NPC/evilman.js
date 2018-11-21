@@ -3,6 +3,7 @@ Evilman = function(x, y){
 
     this.ginger.setSize(8, 14);
     this.ginger.setOrigin(4, 1);
+    this.ginger.trigger = true;
     this.name = 'evilman';
 }
 

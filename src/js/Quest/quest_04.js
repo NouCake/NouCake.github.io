@@ -20,7 +20,7 @@ Quest_04.prototype.onFinish = function(){
 Quest_04._grandpaDialog = function(quest){
     if(quest.state == 0){
         stage.questManager.questList[0].finishQuest();
-        stage.dialogManager.startDialog(quest.dialogs[1]);
+        stage.dialogManager.startDialog(quest.dialogs[0]);
         quest.state++;
     } else {
         stage.dialogManager.startDialog(quest.dialogs[1]);
@@ -28,10 +28,12 @@ Quest_04._grandpaDialog = function(quest){
 }
 
 Quest_04._triggerCollision = function(quest, other){
-    if(other == stage.player){
-        if(!(other.carriedObject && other.carriedObject.name == 'sword')){
-            stage.dialogManager.startDialog(quest.dialogs[2]);
-            other.onCollision(this);
+    if(quest.state == 1){
+        if(other == stage.player){
+            if(!(other.carriedObject && other.carriedObject.name == 'sword')){
+                stage.dialogManager.startDialog(quest.dialogs[2]);
+                other.onCollision(this);
+            }
         }
     }
 }
